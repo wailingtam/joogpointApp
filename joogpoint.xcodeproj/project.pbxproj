@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1185F641CFEA691005D203D /* SocialMediaViewController.swift */; };
+		B16490601CFCD2AF00BFFDB1 /* Adam.otf in Resources */ = {isa = PBXBuildFile; fileRef = B164905F1CFCD2AF00BFFDB1 /* Adam.otf */; };
+		B16490621CFD04C200BFFDB1 /* SoftLine.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490611CFD04C200BFFDB1 /* SoftLine.otf */; };
+		B16490641CFD058F00BFFDB1 /* Quicksand_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */; };
+		B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */; };
 		B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD221CF8745500671183 /* AppDelegate.swift */; };
-		B1D7FD251CF8745500671183 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD241CF8745500671183 /* ViewController.swift */; };
+		B1D7FD251CF8745500671183 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD241CF8745500671183 /* LoginViewController.swift */; };
 		B1D7FD281CF8745500671183 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1D7FD261CF8745500671183 /* Main.storyboard */; };
 		B1D7FD2A1CF8745500671183 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B1D7FD291CF8745500671183 /* Assets.xcassets */; };
 		B1D7FD2D1CF8745500671183 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1D7FD2B1CF8745500671183 /* LaunchScreen.storyboard */; };
@@ -26,14 +31,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B1D7FD1F1CF8745500671183 /* joogpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = joogpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1185F641CFEA691005D203D /* SocialMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialMediaViewController.swift; sourceTree = "<group>"; };
+		B164905F1CFCD2AF00BFFDB1 /* Adam.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Adam.otf; path = Resources/Adam.otf; sourceTree = "<group>"; };
+		B16490611CFD04C200BFFDB1 /* SoftLine.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SoftLine.otf; path = Resources/SoftLine.otf; sourceTree = "<group>"; };
+		B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Quicksand_Light.otf; path = Resources/Quicksand_Light.otf; sourceTree = "<group>"; };
+		B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		B1D7FD1F1CF8745500671183 /* Joogpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Joogpoint.app; path = "/Users/wailingtam/Documents/Xcode/joogpoint/build/Debug-iphoneos/Joogpoint.app"; sourceTree = "<absolute>"; };
 		B1D7FD221CF8745500671183 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B1D7FD241CF8745500671183 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B1D7FD241CF8745500671183 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B1D7FD271CF8745500671183 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B1D7FD291CF8745500671183 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B1D7FD2C1CF8745500671183 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B1D7FD2E1CF8745500671183 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B1D7FD331CF8745500671183 /* joogpointTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = joogpointTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1D7FD331CF8745500671183 /* joogpointTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = joogpointTests.xctest; path = "/Users/wailingtam/Documents/Xcode/joogpoint/build/Debug-iphoneos/joogpointTests.xctest"; sourceTree = "<absolute>"; };
 		B1D7FD371CF8745500671183 /* joogpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = joogpointTests.swift; sourceTree = "<group>"; };
 		B1D7FD391CF8745500671183 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,30 +66,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B164905E1CFCD28E00BFFDB1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */,
+				B16490611CFD04C200BFFDB1 /* SoftLine.otf */,
+				B164905F1CFCD2AF00BFFDB1 /* Adam.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		B1D7FD161CF8745500671183 = {
 			isa = PBXGroup;
 			children = (
 				B1D7FD211CF8745500671183 /* joogpoint */,
 				B1D7FD361CF8745500671183 /* joogpointTests */,
-				B1D7FD201CF8745500671183 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		B1D7FD201CF8745500671183 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B1D7FD1F1CF8745500671183 /* joogpoint.app */,
-				B1D7FD331CF8745500671183 /* joogpointTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		B1D7FD211CF8745500671183 /* joogpoint */ = {
 			isa = PBXGroup;
 			children = (
+				B164905E1CFCD28E00BFFDB1 /* Resources */,
 				B1D7FD221CF8745500671183 /* AppDelegate.swift */,
-				B1D7FD241CF8745500671183 /* ViewController.swift */,
 				B1D7FD261CF8745500671183 /* Main.storyboard */,
+				B1D7FD241CF8745500671183 /* LoginViewController.swift */,
+				B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */,
+				B1185F641CFEA691005D203D /* SocialMediaViewController.swift */,
 				B1D7FD291CF8745500671183 /* Assets.xcassets */,
 				B1D7FD2B1CF8745500671183 /* LaunchScreen.storyboard */,
 				B1D7FD2E1CF8745500671183 /* Info.plist */,
@@ -113,7 +126,7 @@
 			);
 			name = joogpoint;
 			productName = joogpoint;
-			productReference = B1D7FD1F1CF8745500671183 /* joogpoint.app */;
+			productReference = B1D7FD1F1CF8745500671183 /* Joogpoint.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B1D7FD321CF8745500671183 /* joogpointTests */ = {
@@ -164,7 +177,7 @@
 				Base,
 			);
 			mainGroup = B1D7FD161CF8745500671183;
-			productRefGroup = B1D7FD201CF8745500671183 /* Products */;
+			productRefGroup = B1D7FD161CF8745500671183;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -181,6 +194,9 @@
 			files = (
 				B1D7FD2D1CF8745500671183 /* LaunchScreen.storyboard in Resources */,
 				B1D7FD2A1CF8745500671183 /* Assets.xcassets in Resources */,
+				B16490641CFD058F00BFFDB1 /* Quicksand_Light.otf in Resources */,
+				B16490621CFD04C200BFFDB1 /* SoftLine.otf in Resources */,
+				B16490601CFCD2AF00BFFDB1 /* Adam.otf in Resources */,
 				B1D7FD281CF8745500671183 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,7 +215,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1D7FD251CF8745500671183 /* ViewController.swift in Sources */,
+				B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */,
+				B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */,
+				B1D7FD251CF8745500671183 /* LoginViewController.swift in Sources */,
 				B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,7 +352,7 @@
 				INFOPLIST_FILE = joogpoint/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.joogpoint;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Joogpoint;
 			};
 			name = Debug;
 		};
@@ -345,7 +363,7 @@
 				INFOPLIST_FILE = joogpoint/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.joogpoint;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Joogpoint;
 			};
 			name = Release;
 		};
@@ -392,6 +410,7 @@
 				B1D7FD3E1CF8745500671183 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B1D7FD3F1CF8745500671183 /* Build configuration list for PBXNativeTarget "joogpointTests" */ = {
 			isa = XCConfigurationList;
@@ -400,6 +419,7 @@
 				B1D7FD411CF8745500671183 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
