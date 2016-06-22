@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Alamofire
+import Locksmith
+import SwiftyJSON
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -25,6 +28,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.DismissKeyboard))
         self.view.addGestureRecognizer(tap)
+
     }
     
     func DismissKeyboard(){
@@ -75,6 +79,26 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func userLogin(sender: UIButton?) {
         if checkValidUsernameAndPassword() {
+            
+            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username" : usernameTextField.text!, "password" : passwordTextField.text!]).responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+//                        print("JSON: \(json["token"])")
+                        let token = json["token"].stringValue
+                        do {
+                            try Locksmith.updateData(["token": token], forUserAccount: "myUserAccount")
+                        }
+                        catch {
+                        }
+//                        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+//                        print(dictionary?["token"] as! String)
+                    }
+                case .Failure(let error):
+                    print(error)
+                }
+            }
             print("login🚀")
         }
     }
