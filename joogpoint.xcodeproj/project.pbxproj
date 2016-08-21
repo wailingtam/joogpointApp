@@ -9,9 +9,13 @@
 /* Begin PBXBuildFile section */
 		0DB6DD0B94D3B35ED403A05A /* Pods_joogpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661281926BFB3EDE45F5DA84 /* Pods_joogpoint.framework */; };
 		B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1185F641CFEA691005D203D /* SocialMediaViewController.swift */; };
+		B122A6EF1D5766EB00AD62E2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122A6EE1D5766EB00AD62E2 /* MapViewController.swift */; };
+		B122A6F11D57670B00AD62E2 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122A6F01D57670B00AD62E2 /* UserProfileViewController.swift */; };
+		B122A6F31D57679300AD62E2 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B122A6F21D57679300AD62E2 /* SearchViewController.swift */; };
 		B16490601CFCD2AF00BFFDB1 /* Adam.otf in Resources */ = {isa = PBXBuildFile; fileRef = B164905F1CFCD2AF00BFFDB1 /* Adam.otf */; };
 		B16490621CFD04C200BFFDB1 /* SoftLine.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490611CFD04C200BFFDB1 /* SoftLine.otf */; };
 		B16490641CFD058F00BFFDB1 /* Quicksand_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */; };
+		B1A2690F1D69D8B400E3E6C9 /* EstablishmentProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A2690E1D69D8B400E3E6C9 /* EstablishmentProfileViewController.swift */; };
 		B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */; };
 		B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD221CF8745500671183 /* AppDelegate.swift */; };
 		B1D7FD251CF8745500671183 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD241CF8745500671183 /* LoginViewController.swift */; };
@@ -39,11 +43,15 @@
 		65C7EED3EB8441D0BF4C8F76 /* Pods_joogpointTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_joogpointTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		661281926BFB3EDE45F5DA84 /* Pods_joogpoint.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_joogpoint.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1185F641CFEA691005D203D /* SocialMediaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocialMediaViewController.swift; sourceTree = "<group>"; };
+		B122A6EE1D5766EB00AD62E2 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B122A6F01D57670B00AD62E2 /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		B122A6F21D57679300AD62E2 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		B164905F1CFCD2AF00BFFDB1 /* Adam.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Adam.otf; path = Resources/Adam.otf; sourceTree = "<group>"; };
 		B16490611CFD04C200BFFDB1 /* SoftLine.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SoftLine.otf; path = Resources/SoftLine.otf; sourceTree = "<group>"; };
 		B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Quicksand_Light.otf; path = Resources/Quicksand_Light.otf; sourceTree = "<group>"; };
 		B177EACB1D04C46B0098CA0F /* Joogpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joogpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B177EACC1D04C46B0098CA0F /* joogpointTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = joogpointTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1A2690E1D69D8B400E3E6C9 /* EstablishmentProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstablishmentProfileViewController.swift; sourceTree = "<group>"; };
 		B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B1D7FD221CF8745500671183 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B1D7FD241CF8745500671183 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -107,6 +115,10 @@
 				B1D7FD241CF8745500671183 /* LoginViewController.swift */,
 				B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */,
 				B1185F641CFEA691005D203D /* SocialMediaViewController.swift */,
+				B122A6EE1D5766EB00AD62E2 /* MapViewController.swift */,
+				B122A6F01D57670B00AD62E2 /* UserProfileViewController.swift */,
+				B1A2690E1D69D8B400E3E6C9 /* EstablishmentProfileViewController.swift */,
+				B122A6F21D57679300AD62E2 /* SearchViewController.swift */,
 				B1D7FD291CF8745500671183 /* Assets.xcassets */,
 				B1D7FD2B1CF8745500671183 /* LaunchScreen.storyboard */,
 				B1D7FD2E1CF8745500671183 /* Info.plist */,
@@ -348,10 +360,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B122A6F11D57670B00AD62E2 /* UserProfileViewController.swift in Sources */,
+				B122A6F31D57679300AD62E2 /* SearchViewController.swift in Sources */,
 				B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */,
 				B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */,
 				B1D7FD251CF8745500671183 /* LoginViewController.swift in Sources */,
+				B122A6EF1D5766EB00AD62E2 /* MapViewController.swift in Sources */,
 				B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */,
+				B1A2690F1D69D8B400E3E6C9 /* EstablishmentProfileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

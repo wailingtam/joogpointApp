@@ -14,6 +14,7 @@ import SwiftyJSON
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Properties
+    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -58,19 +59,26 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
         else {
             textField.resignFirstResponder()
-            
-            if checkValidUsernameAndPassword() {
-                userLogin(nil)
-            }
+            userLogin(nil)
         }
         // returning the value true indicates that the text field should respond to the user pressing the Return key by dismissing the keyboard
         return true
     }
     
+    func showAlert(message: String, buttonTitle: String) {
+        let alert = UIAlertController(title: "Login error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!) in
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     func checkValidUsernameAndPassword() -> Bool {
-        // Disable the Log in button if any text field is empty.
+        // Disable Log in button if any text field is empty.
         let usernameText = usernameTextField.text ?? ""
         let passwordText = passwordTextField.text ?? ""
+        if (usernameText.isEmpty || passwordText.isEmpty) {
+            showAlert("All fields are required.", buttonTitle: "Ok")
+        }
         return !usernameText.isEmpty && !passwordText.isEmpty
     }
     
@@ -79,36 +87,44 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func userLogin(sender: UIButton?) {
         if checkValidUsernameAndPassword() {
-            
-            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username" : usernameTextField.text!, "password" : passwordTextField.text!]).responseJSON { response in
-                switch response.result {
-                case .Success:
-                    if let data = response.result.value {
-                        let json = JSON(data)
-//                        print("JSON: \(json["token"])")
-                        let token = json["token"].stringValue
-                        do {
-                            try Locksmith.updateData(["token": token], forUserAccount: "myUserAccount")
+            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username": usernameTextField.text!, "password": passwordTextField.text!])
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        if let data = response.result.value {
+                            let json = JSON(data)
+                            let token = json["token"].stringValue
+                            do {
+                                try Locksmith.updateData(["token": token], forUserAccount: "myUserAccount")
+                            }
+                            catch {
+                            }
+                            
+                            // check if saved (remove later)
+                            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+                            print(dictionary?["token"] as! String)
+                            
+                            print("login🚀")
+                            
+                            self.performSegueWithIdentifier("LoginSuccessful", sender: self)
                         }
-                        catch {
+                    case .Failure(_):
+                        var alertMessage = ""
+                        if let data = response.data {
+                            let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
+                            if errorMessage.rangeOfString("Unable to log in with provided credentials.") != nil {                            alertMessage = "Incorrect username or password."
+                            }
                         }
-//                        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-//                        print(dictionary?["token"] as! String)
+                        self.showAlert(alertMessage, buttonTitle: "Try again")
                     }
-                case .Failure(let error):
-                    print(error)
-                }
             }
-            print("login🚀")
         }
     }
     
     @IBAction func unwindToLogin(sender: UIStoryboardSegue) {
-//        if let sourceViewController = sender.sourceViewController as? SignUpViewController {
-//            
+//        if let sourceViewController = sender.sourceViewController as? SignUpViewController {            
 //        }
     }
-    
- 
-    
+
 }

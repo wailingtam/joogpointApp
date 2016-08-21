@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import Alamofire
 
 class SocialMediaViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
+    
     @IBOutlet weak var facebookTextField: UITextField!
     @IBOutlet weak var twitterTextField: UITextField!
     @IBOutlet weak var spotifyTextField: UITextField!
+    
+    var profileUrl = ""
+    var token = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +62,7 @@ class SocialMediaViewController: UIViewController, UITextFieldDelegate {
     
     
     // MARK: UITextFieldDelegate
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let nextTag: NSInteger = textField.tag + 1
         
@@ -66,6 +72,7 @@ class SocialMediaViewController: UIViewController, UITextFieldDelegate {
         }
         else {
             textField.resignFirstResponder()
+            saveSocialMedia(nil)
         }
         // returning the value true indicates that the text field should respond to the user pressing the Return key by dismissing the keyboard
         return true
@@ -80,5 +87,34 @@ class SocialMediaViewController: UIViewController, UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    // MARK: Actions
+    
+    @IBAction func saveSocialMedia(sender: UIButton?) {
+        let headers = [
+            "Authorization": "Token " + token
+        ]
+        
+        let parameters = [
+            "facebook_username": facebookTextField.text!,
+            "twitter_username": twitterTextField.text!,
+            "spotify_username": spotifyTextField.text!
+        ]
+        
+        Alamofire.request(.PUT, profileUrl, headers: headers, parameters: parameters)
+            .validate()
+            .responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                
+                if let JSON = response.result.value {
+                    print("JSON: \(JSON)")
+                }
+        }
+    }
+    
 
 }

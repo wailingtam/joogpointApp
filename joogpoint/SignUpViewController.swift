@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Alamofire
 
 class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     // MARK: Properties
+    
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -59,6 +62,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
      */
     
     // MARK: UITextFieldDelegate
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let nextTag: NSInteger = textField.tag + 1
         
@@ -68,19 +72,45 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
         else {
             textField.resignFirstResponder()
+            userSignUp(nil)
         }
         // returning the value true indicates that the text field should respond to the user pressing the Return key by dismissing the keyboard
         return true
     }
     
-    // MARK: - Navigation
-    @IBOutlet weak var backButton: UIButton!
+    func showAlert(message: String, buttonTitle: String) {
+        let alert = UIAlertController(title: "Sign up error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!) in
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func checkValidFields() -> Bool {
+        // Disable Sign up button if any text field is empty.
+        let usernameText = usernameTextField.text ?? ""
+        let emailText = emailTextField.text ?? ""
+        let passwordText = passwordTextField.text ?? ""
+        let repeatPasswordText = repeatPasswordTextField.text ?? ""
+        
+        let textFieldsFilled = !usernameText.isEmpty && !emailText.isEmpty && !passwordText.isEmpty && !repeatPasswordText.isEmpty
+        if (!textFieldsFilled) {
+            showAlert("All fields are required.", buttonTitle: "Ok")
+        }
+        else if (passwordText != repeatPasswordText) {
+            showAlert("The passwords don't match.", buttonTitle: "Ok")
+        }
+        return textFieldsFilled && passwordText == repeatPasswordText
+    }
 
+    
+    // MARK: - Navigation
+    
+    @IBOutlet weak var backButton: UIButton!
+    
     @IBAction func backToLogin(sender: UIButton) {
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
-
+        
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
@@ -88,10 +118,65 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         /*if finishSignUpButton === sender {
             
         }*/
+        
+        if "AddSocialMedia" == segue.identifier {
+            // Nothing really to do here, since it won't be fired unless
+            // shouldPerformSegueWithIdentifier() says it's ok. In a real app,
+            // this is where you'd pass data to the success view controller.
+            let nextViewController = segue.destinationViewController as! SocialMediaViewController
+            nextViewController.profileUrl = profileUrl
+            nextViewController.token = token
+        }
     }
+    
     
     // MARK: Actions
     
+    var profileUrl = "";
+    var token = "";
     
-
+    @IBAction func userSignUp(sender: UIButton?) {
+        if checkValidFields() {
+            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/users/", parameters: ["username": usernameTextField.text!, "email": emailTextField.text!, "password": passwordTextField.text!])
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        if let data = response.result.value {
+                            let json = JSON(data)
+                            self.profileUrl = json["user_profile"].stringValue
+                            let index = self.profileUrl.startIndex.advancedBy(4)
+                            self.profileUrl.insert("s", atIndex: index)
+                            print("JSON: \(data)")
+                            
+                            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username": self.usernameTextField.text!, "password": self.passwordTextField.text!])
+                                .validate()
+                                .responseJSON { response in
+                                    switch response.result {
+                                    case .Success:
+                                        if let data = response.result.value {
+                                            let json = JSON(data)
+                                            self.token = json["token"].stringValue
+                                            print(self.token)
+                                            self.performSegueWithIdentifier("AddSocialMedia", sender: self)
+                                        }
+                                    case .Failure(let error):
+                                        print(error)
+                                    }
+                            }
+                        }
+                    case .Failure(let error):
+                        print(error)
+                        var alertMessage = ""
+                        if let data = response.data {
+                            let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
+                            if errorMessage.rangeOfString("A user with that username already exists.") != nil {                            alertMessage = "This username is already taken."
+                            }
+                        }
+                        self.showAlert(alertMessage, buttonTitle: "Ok")
+                    }
+                }
+        }
+    }
+    
 }
