@@ -19,11 +19,8 @@ extension SearchViewController: UISearchResultsUpdating {
 
 class SearchViewController: UITableViewController, UISearchBarDelegate, UISearchControllerDelegate {
     
-    // MARK: Properties
-    
-    
     let searchController = UISearchController(searchResultsController: nil)
-    var establishmentsResults:[(name: String, address: String)] = []
+    var establishmentsResults = [Establishment]()
     var usersResults = [String]()
     
     override func viewDidLoad() {
@@ -43,7 +40,6 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         // Add searchBar to your table view’s tableHeaderView
         tableView.tableHeaderView = searchController.searchBar
         
-        
     }
     
     func searchElements(searchText: String, scope: String = "All") {
@@ -59,15 +55,10 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                 switch response.result {
                 case .Success:
                     if let data = response.result.value {
-                        let json = JSON(data)
-                        print(json)
                         self.establishmentsResults.removeAll()
-                        
+                        let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["results"] {
-                            print(subJson["name"].string)
-                            print(subJson["address"].string)
-                            print(subJson["city"].string)
-                            self.establishmentsResults.append((name: subJson["name"].string!, address: subJson["address"].string!))
+                            self.establishmentsResults.append(Establishment(id: subJson["id"].int!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!))
                         }
                         
                         self.tableView.reloadData()
@@ -80,14 +71,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         
     }
     
-    // Handle changes to the search string
     // TODO: when search button cliked call searchEstablishments
-    /*
-    func searchController(controller: UISearchController!, shouldReloadTableForSearchString searchString: String!) -> Bool {
-        self.searchEstablishments(searchString)
-        return true
-    }
-    */
+    
+    // TODO: Add City to Address
+    
+    // MARK: - Table View
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.active && searchController.searchBar.text != "" {
@@ -99,12 +87,27 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        let establishment: (name: String, address: String)
+        let establishment: Establishment
         if searchController.active && searchController.searchBar.text != "" {
-            establishment = (establishmentsResults[indexPath.row])
+            establishment = establishmentsResults[indexPath.row]
             cell.textLabel?.text = establishment.name
-            cell.detailTextLabel?.text = establishment.address
+            cell.detailTextLabel?.text = establishment.address + ", " + establishment.city
         }
         return cell
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowEstablishmentProfile" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let establishment: Establishment
+                if searchController.active && searchController.searchBar.text != "" {
+                    establishment = establishmentsResults[indexPath.row]
+                    let nextViewController = segue.destinationViewController as! EstablishmentProfileViewController
+                    nextViewController.profileEstablishment = establishment
+                }
+            }
+        }
     }
 }

@@ -101,33 +101,6 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         }
         return textFieldsFilled && passwordText == repeatPasswordText
     }
-
-    
-    // MARK: - Navigation
-    
-    @IBOutlet weak var backButton: UIButton!
-    
-    @IBAction func backToLogin(sender: UIButton) {
-        self.navigationController?.popViewControllerAnimated(true)
-    }
-        
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        /*if finishSignUpButton === sender {
-            
-        }*/
-        
-        if "AddSocialMedia" == segue.identifier {
-            // Nothing really to do here, since it won't be fired unless
-            // shouldPerformSegueWithIdentifier() says it's ok. In a real app,
-            // this is where you'd pass data to the success view controller.
-            let nextViewController = segue.destinationViewController as! SocialMediaViewController
-            nextViewController.profileUrl = profileUrl
-            nextViewController.token = token
-        }
-    }
     
     
     // MARK: Actions
@@ -176,6 +149,31 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                         self.showAlert(alertMessage, buttonTitle: "Ok")
                     }
                 }
+        }
+    }
+    
+    
+    // MARK: - Navigation
+    
+    @IBAction func backToLogin(sender: UIButton) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        /*if finishSignUpButton === sender {
+         
+         }*/
+        
+        if segue.identifier == "AddSocialMedia" {
+            // Nothing really to do here, since it won't be fired unless
+            // shouldPerformSegueWithIdentifier() says it's ok. In a real app,
+            // this is where you'd pass data to the success view controller.
+            let nextViewController = segue.destinationViewController as! SocialMediaViewController
+            nextViewController.profileUrl = profileUrl
+            nextViewController.token = token
         }
     }
     
