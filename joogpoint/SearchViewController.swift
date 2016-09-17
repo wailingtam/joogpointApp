@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 import Alamofire
 import SwiftyJSON
 import Locksmith
@@ -22,6 +23,11 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
     let searchController = UISearchController(searchResultsController: nil)
     var establishmentsResults = [Establishment]()
     var usersResults = [String]()
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +45,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         
         // Add searchBar to your table view’s tableHeaderView
         tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.placeholder = "Search by name or address"
         
     }
     
@@ -49,7 +56,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/establishments/search/", headers: headers, parameters: ["name": searchText])
+        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/establishments/search/", headers: headers, parameters: ["query": searchText])
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -57,8 +64,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                     if let data = response.result.value {
                         self.establishmentsResults.removeAll()
                         let json = JSON(data)
-                        for (_, subJson):(String, JSON) in json["results"] {
-                            self.establishmentsResults.append(Establishment(id: subJson["id"].int!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!))
+                        for (_, subJson):(String, JSON) in json {
+                            self.establishmentsResults.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: 41.387989, longitude: 2.167861)/*, playlist: subJson["establishment_plays"].string!*/))
                         }
                         
                         self.tableView.reloadData()
@@ -90,7 +97,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
         let establishment: Establishment
         if searchController.active && searchController.searchBar.text != "" {
             establishment = establishmentsResults[indexPath.row]
-            cell.textLabel?.text = establishment.name
+            cell.textLabel?.text = establishment.title
             cell.detailTextLabel?.text = establishment.address + ", " + establishment.city
         }
         return cell

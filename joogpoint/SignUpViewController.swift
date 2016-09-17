@@ -122,7 +122,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                             self.profileUrl.insert("s", atIndex: index)
                             print("JSON: \(data)")
                             
-                            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username": self.usernameTextField.text!, "password": self.passwordTextField.text!])
+                            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/login/", parameters: ["username": self.usernameTextField.text!, "password": self.passwordTextField.text!])
                                 .validate()
                                 .responseJSON { response in
                                     switch response.result {

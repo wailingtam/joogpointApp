@@ -102,7 +102,7 @@ class SocialMediaViewController: UIViewController, UITextFieldDelegate {
             "spotify_username": spotifyTextField.text!
         ]
         
-        Alamofire.request(.PUT, profileUrl, headers: headers, parameters: parameters)
+        Alamofire.request(.PATCH, profileUrl, headers: headers, parameters: parameters)
             .validate()
             .responseJSON { response in
                 print(response.request)  // original URL request

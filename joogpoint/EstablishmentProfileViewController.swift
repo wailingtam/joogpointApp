@@ -25,7 +25,7 @@ class EstablishmentProfileViewController: UIViewController {
     func configureView() {
         if let profileEstablishment = profileEstablishment {
             if let nameLabel = nameLabel, addressLabel = addressLabel, cityLabel = cityLabel {
-                nameLabel.text = profileEstablishment.name
+                nameLabel.text = profileEstablishment.title
                 addressLabel.text = profileEstablishment.address
                 cityLabel.text = profileEstablishment.postcode + " " + profileEstablishment.city
             }

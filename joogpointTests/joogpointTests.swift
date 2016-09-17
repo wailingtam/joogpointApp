@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import joogpoint
+// @testable import joogpoint
 
 class joogpointTests: XCTestCase {
     

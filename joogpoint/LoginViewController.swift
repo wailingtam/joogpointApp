@@ -86,7 +86,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func userLogin(sender: UIButton?) {
         if checkValidUsernameAndPassword() {
-            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/api-token-auth/", parameters: ["username": usernameTextField.text!, "password": passwordTextField.text!])
+            Alamofire.request(.POST, "https://joogpoint.herokuapp.com/login/", parameters: ["username": usernameTextField.text!, "password": passwordTextField.text!])
                 .validate()
                 .responseJSON { response in
                     switch response.result {
@@ -107,6 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             print("login🚀")
                             
                             self.performSegueWithIdentifier("LoginSuccessful", sender: self)
+                            
                         }
                     case .Failure(_):
                         var alertMessage = ""
@@ -114,6 +115,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
                             if errorMessage.rangeOfString("Unable to log in with provided credentials.") != nil {                            alertMessage = "Incorrect username or password."
                             }
+                            // TODO: Deal with other errors
                         }
                         self.showAlert(alertMessage, buttonTitle: "Try again")
                     }

@@ -7,19 +7,30 @@
 //
 
 import Foundation
+import MapKit
 
-class Establishment {
-    var id : Int
-    var name : String
-    var address : String
-    var postcode : String
-    var city : String
+class Establishment: NSObject, MKAnnotation {
+    let url : String
+    let title : String?
+    let address : String
+    let postcode : String
+    let city : String
+    let coordinate: CLLocationCoordinate2D
     
-    init(id: Int, name: String, address: String, postcode: String, city: String) {
-        self.id = id
-        self.name = name
+    init(url: String, name: String, address: String, postcode: String, city: String, coordinate: CLLocationCoordinate2D) {
+        self.url = url
+        self.title = name
         self.address = address
         self.postcode = postcode
         self.city = city
+        self.coordinate = coordinate
+        
+        super.init()
     }
+    
+    var subtitle: String? {
+        return address
+    }
+    
 }
+ 

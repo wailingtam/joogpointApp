@@ -7,12 +7,92 @@
 //
 
 import UIKit
+import MapKit
+import Alamofire
+import Locksmith
+import SwiftyJSON
 
 class MapViewController: UIViewController {
+    
+    @IBOutlet weak var mapView: MKMapView!
+    
+    // MARK: - location manager to authorize user location for Maps app
+    var locationManager = CLLocationManager()
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
+            mapView.showsUserLocation = true
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBarHidden = true
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        checkLocationAuthorizationStatus()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // set initial location in Barcelona
+        let initialLocation = CLLocation(latitude: 41.387015, longitude: 2.169908)
+        
+        centerMapOnLocation(initialLocation)
+        
+        mapView.delegate = self
+        
+        loadEstablishments {response in
+            self.mapView.addAnnotations(response)
+        }
+        
     }
+    
+    override func viewWillDisappear(animated: Bool)
+    {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBarHidden = false
+    }
+    
+    func loadEstablishments(completion : (Array<Establishment>) -> ()){
+        
+        var establishments = [Establishment]()
+        
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        let headers = [
+            "Authorization": "Token " + (dictionary?["token"] as! String)
+        ]
+
+         Alamofire.request(.GET, "https://joogpoint.herokuapp.com/establishments/", headers: headers)
+             .validate()
+             .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+                        for (_, subJson):(String, JSON) in json["results"] {
+                            establishments.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
+                        }
+                    }
+                    completion(establishments)
+                    
+                case .Failure(let error):
+                    print(error)
+             }
+         }
+        
+    }
+    
+    // Specify the rectangular region to display to get a correct zoom level 
+    let regionRadius: CLLocationDistance = 1000
+    func centerMapOnLocation(location: CLLocation) {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+
 }
