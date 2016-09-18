@@ -29,29 +29,29 @@ class PlaylistTableViewController: UITableViewController {
     
     func loadTracks() {
         
-        /*let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-         
-         let headers = [
-         "Authorization": "Token " + (dictionary?["token"] as! String)
-         ]*/
-        /*
-         Alamofire.request(.GET, establishment.playlist, headers: headers)
-         .validate()
-         .responseJSON { response in
-         switch response.result {
-         case .Success:
-         if let data = response.result.value {
-         let json = JSON(data)
-         for (_, subJson):(String, JSON) in json {
-         self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
-         }
-         }
-         
-         case .Failure(let error):
-         print(error)
-         }
-         }
-         */
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        let headers = [
+            "Authorization": "Token " + (dictionary?["token"] as! String)
+        ]
+        
+        /*Alamofire.request(.GET, establishment.playlist, headers: headers)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+                        for (_, subJson):(String, JSON) in json {
+                            self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
+                        }
+                    }
+                    
+                case .Failure(let error):
+                    print(error)
+                }
+        }*/
+        
         
     }
 

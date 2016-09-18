@@ -25,7 +25,27 @@ class MapViewController: UIViewController {
             locationManager.requestWhenInUseAuthorization()
         }
     }
-    
+    /*
+    var focusEstablishment: Establishment? {
+        didSet {
+            configureView()
+        }
+    }
+    */
+    /*
+     override func viewWillAppear(animated: Bool) {
+     super.viewWillAppear(animated)
+     self.navigationController?.navigationBarHidden = true
+     self.navigationController?.setNavigationBarHidden(true, animated: true)
+     }
+     */
+    /*
+    func configureView() {
+        if let establishment = focusEstablishment {
+            centerMapOnLocation(CLLocation(latitude: establishment.coordinate.latitude, longitude: establishment.coordinate.longitude))
+        }
+    }
+    */
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = true
@@ -46,16 +66,12 @@ class MapViewController: UIViewController {
         
         mapView.delegate = self
         
+        // configureView()
+        
         loadEstablishments {response in
             self.mapView.addAnnotations(response)
         }
         
-    }
-    
-    override func viewWillDisappear(animated: Bool)
-    {
-        super.viewWillDisappear(animated)
-        self.navigationController?.navigationBarHidden = false
     }
     
     func loadEstablishments(completion : (Array<Establishment>) -> ()){
@@ -76,7 +92,7 @@ class MapViewController: UIViewController {
                     if let data = response.result.value {
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["results"] {
-                            establishments.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
+                            establishments.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), playlistUrl: subJson["establishment_playlist"].string!))
                         }
                     }
                     completion(establishments)

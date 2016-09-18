@@ -12,9 +12,9 @@ class Track {
     let id: Int
     let title : String
     let artist : String
-    let votes :  Int
+    var votes :  Int?
     
-    init(id: Int, title: String, artist: String, votes: Int) {
+    init(id: Int, title: String, artist: String, votes: Int? = nil) {
         self.id = id
         self.title = title
         self.artist = artist

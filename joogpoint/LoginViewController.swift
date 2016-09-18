@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Locksmith
 import SwiftyJSON
+import MapKit
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
@@ -126,6 +127,42 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func unwindToLogin(sender: UIStoryboardSegue) {
 //        if let sourceViewController = sender.sourceViewController as? SignUpViewController {            
 //        }
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "LoginSuccessful" {
+            
+            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+            
+            let headers = [
+                "Authorization": "Token " + (dictionary?["token"] as! String)
+            ]
+            
+            Alamofire.request(.GET, "https://joogpoint.herokuapp.com/profiles/me/", headers: headers)
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        if let data = response.result.value {
+                            let json = JSON(data)
+
+                            let defaults = NSUserDefaults.standardUserDefaults()
+                            
+                            let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                            
+                            let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
+                            defaults.setObject(encodedData, forKey: "user_profile")
+
+                            defaults.synchronize()
+                        }
+                        
+                    case .Failure(let error):
+                        print(error)
+                    }
+                }
+        }
     }
 
 }

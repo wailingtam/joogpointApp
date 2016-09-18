@@ -45,8 +45,7 @@ extension MapViewController: MKMapViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowEstablishmentDetail" {
             let nextViewController = segue.destinationViewController as! EstablishmentProfileViewController
-            nextViewController.profileEstablishment = (sender?.annotation!)! as? Establishment
-            //self.navigationController!.setNavigationBarHidden(navigationController?.navigationBarHidden == false, animated: true)
+            nextViewController.establishment = (sender?.annotation!)! as? Establishment
         }
     }
 

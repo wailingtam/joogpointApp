@@ -16,14 +16,16 @@ class Establishment: NSObject, MKAnnotation {
     let postcode : String
     let city : String
     let coordinate: CLLocationCoordinate2D
+    var playlistUrl : String?
     
-    init(url: String, name: String, address: String, postcode: String, city: String, coordinate: CLLocationCoordinate2D) {
+    init(url: String, name: String, address: String, postcode: String, city: String, coordinate: CLLocationCoordinate2D, playlistUrl: String? = nil) {
         self.url = url
         self.title = name
         self.address = address
         self.postcode = postcode
         self.city = city
         self.coordinate = coordinate
+        self.playlistUrl = playlistUrl
         
         super.init()
     }
@@ -31,6 +33,7 @@ class Establishment: NSObject, MKAnnotation {
     var subtitle: String? {
         return address
     }
-    
+
+
 }
  
