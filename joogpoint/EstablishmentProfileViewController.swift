@@ -19,6 +19,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentSongLabel: UILabel!
+    @IBOutlet weak var currentArtistLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -53,7 +54,43 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
         
+        getCurrentSong()
+        
         loadPlaylist()
+        
+    }
+    
+    func getCurrentSong() {
+        
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        let headers = [
+            "Authorization": "Token " + (dictionary?["token"] as! String)
+        ]
+        
+        var playlistUrl = establishment!.playlistUrl
+        let index = playlistUrl!.startIndex.advancedBy(4)
+        playlistUrl!.insert("s", atIndex: index)
+        
+        Alamofire.request(.GET, playlistUrl! + "current-song/", headers: headers)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+                        if (!json["now_playing"]) {
+                            self.currentSongLabel.text = json["name"].string!
+                            self.currentArtistLabel.text = json["artist"].string!
+                        }
+                    }
+                    
+                case .Failure(let error):
+                    print(error)
+                }
+        }
+
+
     }
     
     func loadPlaylist() {
@@ -129,14 +166,26 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackTableViewCell
         let track: Track
         track = tracks[indexPath.row]
-        cell.textLabel?.text = track.title
-        cell.detailTextLabel?.text = track.artist
+        cell.titleLabel.text = track.title
+        cell.artistLabel.text = track.artist
+        cell.votesCountButton.setTitle(String(track.votes!), forState: .Normal)
+        cell.idLabel.text = String(track.id)
+        
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        //let indexPath = self.tableView.indexPathForSelectedRow()
+        
+        let currentCell = self.tableView.cellForRowAtIndexPath(indexPath) as! TrackTableViewCell
+        
+        print(currentCell.idLabel!.text)
+        
+    }
     
     // MARK: - Navigation
     
@@ -148,7 +197,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     }
     
     @IBAction func showEstablishmentInMap(sender: UIButton) {
-//        self.performSegueWithIdentifier("showEstablishmentInMap", sender: self)
+//        self.performSegueWithIdentifier("ShowEstablishmentInMap", sender: self)
     }
     /*
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

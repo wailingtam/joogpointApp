@@ -21,8 +21,8 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var requestedSongsButton: UIButton!
     
     var checkIns = [Establishment]()
-    var votedTracks = [Track]()
-    var requestedTracks = [Track]()
+    var votedSongs = [Track]()
+    var requestedSongs = [Track]()
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -63,7 +63,7 @@ class UserProfileViewController: UIViewController {
                     if let data = response.result.value {
                         let json = JSON(data)
                         
-                        let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                        let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
                         
                         self.checkInsButton.setTitle(userProfile.checkedIn, forState: .Normal)
                         self.votedSongsButton.setTitle(userProfile.voted, forState: .Normal)
@@ -74,17 +74,20 @@ class UserProfileViewController: UIViewController {
                         
                         defaults.synchronize()
                         
+                        self.checkIns.removeAll()
+                        self.votedSongs.removeAll()
+                        self.requestedSongs.removeAll()
                         
                         for (_, subJson):(String, JSON) in json["user"]["checked_in"] {
                             self.checkIns.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["voted"] {
-                            self.votedTracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!))
+                            self.votedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!))
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["requested"] {
-                            self.requestedTracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!))
+                            self.requestedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!))
                         }
                     }
                     
@@ -93,5 +96,34 @@ class UserProfileViewController: UIViewController {
                 }
         }
 
+    }
+    
+    // MARK: - Navigation
+    
+    @IBAction func showCheckIns(sender: UIButton) {
+        self.performSegueWithIdentifier("ShowCheckIns", sender: self)
+    }
+    
+    @IBAction func showVotedSongs(sender: UIButton) {
+        self.performSegueWithIdentifier("ShowVotedSongs", sender: self)
+    }
+    
+    @IBAction func showRequestedSongs(sender: UIButton) {
+        self.performSegueWithIdentifier("ShowRequestedSongs", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowCheckIns" {
+            let nextViewController = segue.destinationViewController as! CheckInsViewController
+            nextViewController.checkIns = self.checkIns
+        }
+        else if segue.identifier == "ShowVotedSongs" {
+            let nextViewController = segue.destinationViewController as! VotedSongsViewController
+            nextViewController.votedSongs = self.votedSongs
+        }
+        else if segue.identifier == "ShowRequestedSongs" {
+            let nextViewController = segue.destinationViewController as! RequestedSongsViewController
+            nextViewController.requestedSongs = self.requestedSongs
+        }
     }
 }

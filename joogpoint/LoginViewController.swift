@@ -29,7 +29,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.DismissKeyboard))
         self.view.addGestureRecognizer(tap)
-
     }
     
     func DismissKeyboard(){
@@ -150,7 +149,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
                             let defaults = NSUserDefaults.standardUserDefaults()
                             
-                            let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                            let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
                             
                             let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
                             defaults.setObject(encodedData, forKey: "user_profile")

@@ -49,6 +49,9 @@ class MapViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = true
+        
+        if self.tabBarController != nil {
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
