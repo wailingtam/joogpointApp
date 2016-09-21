@@ -25,7 +25,16 @@ class Establishment: NSObject, MKAnnotation {
         self.postcode = postcode
         self.city = city
         self.coordinate = coordinate
-        self.playlistUrl = playlistUrl
+        
+        if let pUrl = playlistUrl {
+            var url = pUrl
+            let index = url.startIndex.advancedBy(4)
+            url.insert("s", atIndex: index)
+            self.playlistUrl = url
+        }
+        else {
+           self.playlistUrl = playlistUrl
+        }
         
         super.init()
     }

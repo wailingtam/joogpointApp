@@ -68,11 +68,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        var playlistUrl = establishment!.playlistUrl
-        let index = playlistUrl!.startIndex.advancedBy(4)
-        playlistUrl!.insert("s", atIndex: index)
-        
-        Alamofire.request(.GET, playlistUrl! + "current-song/", headers: headers)
+        Alamofire.request(.GET, establishment!.playlistUrl! + "current-song/", headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -101,11 +97,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        var playlistUrl = establishment!.playlistUrl
-        let index = playlistUrl!.startIndex.advancedBy(4)
-        playlistUrl!.insert("s", atIndex: index)
-        
-        Alamofire.request(.GET, playlistUrl!, headers: headers)
+        Alamofire.request(.GET, establishment!.playlistUrl!, headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {

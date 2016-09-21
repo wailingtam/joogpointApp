@@ -19,6 +19,13 @@ class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var votesCountButton: UIButton!
     @IBOutlet weak var idLabel: UILabel!
     
+    @IBOutlet weak var trackImage2: UIImageView!
+    @IBOutlet weak var titleLabel2: UILabel!
+    @IBOutlet weak var artistLabel2: UILabel!
+    @IBOutlet weak var votesCountButton2: UIButton!
+    @IBOutlet weak var requestedButton2: UIButton!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

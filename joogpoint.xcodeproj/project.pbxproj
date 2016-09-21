@@ -20,6 +20,8 @@
 		B1A269111D6A0F5900E3E6C9 /* Establishment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A269101D6A0F5900E3E6C9 /* Establishment.swift */; };
 		B1A269131D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */; };
 		B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */; };
+		B1BC9A2D1D90733400BCACCF /* MyJoogpointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1BC9A2C1D90733400BCACCF /* MyJoogpointsViewController.swift */; };
+		B1BC9A2F1D90974F00BCACCF /* MyEstablishmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1BC9A2E1D90974F00BCACCF /* MyEstablishmentViewController.swift */; };
 		B1CEC8211D8B53D900B92A96 /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CEC8201D8B53D900B92A96 /* TrackTableViewCell.swift */; };
 		B1CEC8231D8B53F900B92A96 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CEC8221D8B53F900B92A96 /* Track.swift */; };
 		B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D7FD221CF8745500671183 /* AppDelegate.swift */; };
@@ -31,6 +33,7 @@
 		B1E53D711D8F13A400D32D0F /* CheckInsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E53D701D8F13A400D32D0F /* CheckInsViewController.swift */; };
 		B1E53D731D8F216A00D32D0F /* VotedSongsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E53D721D8F216A00D32D0F /* VotedSongsViewController.swift */; };
 		B1E53D751D8F241000D32D0F /* RequestedSongsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */; };
+		B1F3002C1D92262E00FB6E55 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */; };
 		E1D97FF08D96FC72BDDB96D9 /* Pods_joogpointTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C7EED3EB8441D0BF4C8F76 /* Pods_joogpointTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,8 @@
 		B1A269101D6A0F5900E3E6C9 /* Establishment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Establishment.swift; sourceTree = "<group>"; };
 		B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstablishmentProfileViewController.swift; sourceTree = "<group>"; };
 		B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		B1BC9A2C1D90733400BCACCF /* MyJoogpointsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyJoogpointsViewController.swift; sourceTree = "<group>"; };
+		B1BC9A2E1D90974F00BCACCF /* MyEstablishmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyEstablishmentViewController.swift; sourceTree = "<group>"; };
 		B1CEC8201D8B53D900B92A96 /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 		B1CEC8221D8B53F900B92A96 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		B1D7FD221CF8745500671183 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +82,7 @@
 		B1E53D701D8F13A400D32D0F /* CheckInsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckInsViewController.swift; sourceTree = "<group>"; };
 		B1E53D721D8F216A00D32D0F /* VotedSongsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VotedSongsViewController.swift; sourceTree = "<group>"; };
 		B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestedSongsViewController.swift; sourceTree = "<group>"; };
+		B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
 		B362476DEB79F1EE6FD63A12 /* Pods-joogpointTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-joogpointTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-joogpointTests/Pods-joogpointTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,6 +145,9 @@
 				B122A6EE1D5766EB00AD62E2 /* MapViewController.swift */,
 				B165D7B81D8A07E000B10BC9 /* VCMapView.swift */,
 				B122A6F21D57679300AD62E2 /* SearchViewController.swift */,
+				B1BC9A2C1D90733400BCACCF /* MyJoogpointsViewController.swift */,
+				B1BC9A2E1D90974F00BCACCF /* MyEstablishmentViewController.swift */,
+				B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */,
 				B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */,
 				B1A269101D6A0F5900E3E6C9 /* Establishment.swift */,
 				B1CEC8201D8B53D900B92A96 /* TrackTableViewCell.swift */,
@@ -390,15 +399,18 @@
 				B165D7B91D8A07E000B10BC9 /* VCMapView.swift in Sources */,
 				B1E53D731D8F216A00D32D0F /* VotedSongsViewController.swift in Sources */,
 				B122A6F31D57679300AD62E2 /* SearchViewController.swift in Sources */,
+				B1BC9A2D1D90733400BCACCF /* MyJoogpointsViewController.swift in Sources */,
 				B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */,
 				B1E53D751D8F241000D32D0F /* RequestedSongsViewController.swift in Sources */,
 				B1A269131D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift in Sources */,
+				B1F3002C1D92262E00FB6E55 /* PlaylistViewController.swift in Sources */,
 				B1CEC8211D8B53D900B92A96 /* TrackTableViewCell.swift in Sources */,
 				B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */,
 				B1E53D711D8F13A400D32D0F /* CheckInsViewController.swift in Sources */,
 				B1D7FD251CF8745500671183 /* LoginViewController.swift in Sources */,
 				B1CEC8231D8B53F900B92A96 /* Track.swift in Sources */,
 				B122A6EF1D5766EB00AD62E2 /* MapViewController.swift in Sources */,
+				B1BC9A2F1D90974F00BCACCF /* MyEstablishmentViewController.swift in Sources */,
 				B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
