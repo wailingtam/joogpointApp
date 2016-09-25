@@ -79,7 +79,7 @@ class UserProfileViewController: UIViewController {
                         self.requestedSongs.removeAll()
                         
                         for (_, subJson):(String, JSON) in json["user"]["checked_in"] {
-                            self.checkIns.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
+                            self.checkIns.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["voted"] {
@@ -110,6 +110,20 @@ class UserProfileViewController: UIViewController {
     
     @IBAction func showRequestedSongs(sender: UIButton) {
         self.performSegueWithIdentifier("ShowRequestedSongs", sender: self)
+    }
+    
+    @IBAction func editProfile(sender: UIButton) {
+        self.performSegueWithIdentifier("EditUserProfile", sender: self)
+    }
+    
+    @IBAction func logOut(sender: UIButton) {
+        do {
+            try Locksmith.deleteDataForUserAccount("myUserAccount")
+        }
+        catch {
+        }
+        
+        self.performSegueWithIdentifier("LogOut", sender: self)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

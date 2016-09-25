@@ -43,10 +43,14 @@ class MyEstablishmentViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        establishment?.loadEstablishment()
+        configureView()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        configureView()
         
         self.explicitLyricsButton.titleLabel?.textAlignment = NSTextAlignment.Center;
         self.explicitLyricsButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -123,6 +127,7 @@ class MyEstablishmentViewController: UIViewController {
                                 self.playlist.originalCreator = json["original_creator"].string!
                                 self.playlist.originalSpotifyUrl = json["original_spotify_url"].string!
                             }
+                            self.showAlert("Set Playlist", message: "New playlist set successfully", buttonTitle: "Ok")
                         case .Failure(let error):
                             print(error)
                         }
@@ -151,45 +156,55 @@ class MyEstablishmentViewController: UIViewController {
     
     @IBAction func resetPlaylist(sender: UIButton) {
         
-        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-        
-        let headers = [
-            "Authorization": "Token " + (dictionary?["token"] as! String)
-        ]
-        
-        Alamofire.request(.PUT, establishment!.playlistUrl! + "reset-playlist/", headers: headers)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .Success:
-                    self.showAlert("Reset Playlist", message: "Original tracks, votes and order have been reset.", buttonTitle: "Ok")
-                    
-                case .Failure(let error):
-                    print(error)
-                    self.showAlert("Reset Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
-                }
+        if self.playlist.spotifyUrl == "" {
+            self.showAlert("Reset Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
+        }
+        else {
+            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+            
+            let headers = [
+                "Authorization": "Token " + (dictionary?["token"] as! String)
+            ]
+            
+            Alamofire.request(.PUT, establishment!.playlistUrl! + "reset-playlist/", headers: headers)
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        self.showAlert("Reset Playlist", message: "Original tracks, votes and order have been reset.", buttonTitle: "Ok")
+                        
+                    case .Failure(let error):
+                        print(error)
+                        self.showAlert("Reset Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
+                    }
+            }
         }
     }
     
     @IBAction func clearVotes(sender: UIButton) {
         
-        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-        
-        let headers = [
-            "Authorization": "Token " + (dictionary?["token"] as! String)
-        ]
-        
-        Alamofire.request(.PUT, establishment!.playlistUrl! + "reset-votes/", headers: headers)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .Success:
-                    self.showAlert("Clear Votes", message: "All song votes have been set to zero!", buttonTitle: "Ok")
-                                        
-                case .Failure(let error):
-                    print(error)
-                    self.showAlert("Reset Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
-                }
+        if self.playlist.spotifyUrl == "" {
+            self.showAlert("Clear Votes", message: "You don't have a playlist set.", buttonTitle: "Ok")
+        }
+        else {
+            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+            
+            let headers = [
+                "Authorization": "Token " + (dictionary?["token"] as! String)
+            ]
+            
+            Alamofire.request(.PUT, establishment!.playlistUrl! + "reset-votes/", headers: headers)
+                .validate()
+                .responseJSON { response in
+                    switch response.result {
+                    case .Success:
+                        self.showAlert("Clear Votes", message: "All song votes have been set to zero!", buttonTitle: "Ok")
+                                            
+                    case .Failure(let error):
+                        print(error)
+                        self.showAlert("Clear Votes", message: "You don't have a playlist set.", buttonTitle: "Ok")
+                    }
+            }
         }
     }
     
@@ -223,21 +238,26 @@ class MyEstablishmentViewController: UIViewController {
     
     @IBAction func removePlaylist(sender: UIButton) {
         
-        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-        
-        let headers = [
-            "Authorization": "Token " + (dictionary?["token"] as! String)
-        ]
-        
-        Alamofire.request(.PUT, establishment!.playlistUrl! + "clear/", headers: headers)
-            .validate(statusCode: 200..<300)
-            .response { response in
-                // check if there is a playlist set
-                
-                self.playlist.spotifyUrl = ""
-                self.playlist.originalCreator = ""
-                self.playlist.originalSpotifyUrl = ""
-                self.showAlert("Remove Playlist", message: "Playlist removed! Go set a new one!🎵", buttonTitle: "Ok")
+        if self.playlist.spotifyUrl == "" {
+            self.showAlert("Remove Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
+        }
+        else {
+            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+            
+            let headers = [
+                "Authorization": "Token " + (dictionary?["token"] as! String)
+            ]
+            
+            Alamofire.request(.PUT, establishment!.playlistUrl! + "clear/", headers: headers)
+                .validate(statusCode: 200..<300)
+                .response { response in
+                    // check if there is a playlist set
+                    
+                    self.playlist.spotifyUrl = ""
+                    self.playlist.originalCreator = ""
+                    self.playlist.originalSpotifyUrl = ""
+                    self.showAlert("Remove Playlist", message: "Playlist removed! Go set a new one!🎵", buttonTitle: "Ok")
+            }
         }
     }
 
@@ -253,10 +273,16 @@ class MyEstablishmentViewController: UIViewController {
     }
     
     @IBAction func segueToEditProfile(sender: AnyObject) {
+        self.performSegueWithIdentifier("EditEstablishmentProfile", sender: self)
     }
     
     @IBAction func segueToPlaylist(sender: UIButton) {
-        self.performSegueWithIdentifier("ShowPlaylist", sender: self)
+        if self.playlist.spotifyUrl == "" {
+            self.showAlert("Current Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
+        }
+        else {
+            self.performSegueWithIdentifier("ShowPlaylist", sender: self)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -268,6 +294,10 @@ class MyEstablishmentViewController: UIViewController {
             let nextViewController = segue.destinationViewController as! PlaylistViewController
             nextViewController.playlistUrl = establishment!.playlistUrl!
             nextViewController.establishmentName = establishment!.title
+        }
+        else if segue.identifier == "EditEstablishmentProfile" {
+            let nextViewController = segue.destinationViewController as! EditEstablishmentViewController
+            nextViewController.establishment = establishment
         }
     }
 

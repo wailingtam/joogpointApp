@@ -65,7 +65,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate, UISearch
                         self.establishmentsResults.removeAll()
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json {
-                            self.establishmentsResults.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: 41.387989, longitude: 2.167861), playlistUrl: subJson["establishment_playlist"].string!))
+                            self.establishmentsResults.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: 41.387989, longitude: 2.167861), playlistUrl: subJson["establishment_playlist"].string!))
                         }
                         
                         self.tableView.reloadData()

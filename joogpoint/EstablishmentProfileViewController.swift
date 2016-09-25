@@ -106,7 +106,9 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
                         self.tracks.removeAll()
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["playlist_of"] {
-                            self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
+                            if (subJson["in_playlist"].boolValue) {
+                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
+                            }
                         }
                     }
                     

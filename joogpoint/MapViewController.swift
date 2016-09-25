@@ -12,12 +12,15 @@ import Alamofire
 import Locksmith
 import SwiftyJSON
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
+    var currentAnnotations = [MKAnnotation]()
+    
     // MARK: - location manager to authorize user location for Maps app
     var locationManager = CLLocationManager()
+    
     func checkLocationAuthorizationStatus() {
         if CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse {
             mapView.showsUserLocation = true
@@ -25,6 +28,7 @@ class MapViewController: UIViewController {
             locationManager.requestWhenInUseAuthorization()
         }
     }
+    
     /*
     var focusEstablishment: Establishment? {
         didSet {
@@ -52,6 +56,11 @@ class MapViewController: UIViewController {
         
         if self.tabBarController != nil {
         }
+        
+        loadEstablishments {response in
+            self.currentAnnotations = response
+            self.mapView.addAnnotations(response)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -65,16 +74,32 @@ class MapViewController: UIViewController {
         // set initial location in Barcelona
         let initialLocation = CLLocation(latitude: 41.387015, longitude: 2.169908)
         
+        // remove later
         centerMapOnLocation(initialLocation)
+        
+        if (CLLocationManager.locationServicesEnabled()) {
+            locationManager = CLLocationManager()
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        }
         
         mapView.delegate = self
         
-        // configureView()
+//        configureView()
         
-        loadEstablishments {response in
-            self.mapView.addAnnotations(response)
-        }
+//        loadEstablishments {response in
+//            self.mapView.addAnnotations(response)
+//        }
         
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        centerMapOnLocation(CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
     }
     
     func loadEstablishments(completion : (Array<Establishment>) -> ()){
@@ -92,10 +117,13 @@ class MapViewController: UIViewController {
              .responseJSON { response in
                 switch response.result {
                 case .Success:
+                    
+                    self.mapView.removeAnnotations(self.currentAnnotations)
+                    
                     if let data = response.result.value {
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["results"] {
-                            establishments.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), playlistUrl: subJson["establishment_playlist"].string!))
+                            establishments.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), playlistUrl: subJson["establishment_playlist"].string!))
                         }
                     }
                     completion(establishments)

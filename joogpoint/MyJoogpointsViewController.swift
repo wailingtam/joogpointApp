@@ -19,12 +19,17 @@ class MyJoogpointsViewController: UIViewController {
     
     var joogpoints: [Establishment] = []
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        loadJoogpoints()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
         
-        loadJoogpoints()
+        // loadJoogpoints()
     }
     
     func loadJoogpoints() {
@@ -42,9 +47,9 @@ class MyJoogpointsViewController: UIViewController {
                 case .Success:
                     if let data = response.result.value {
                         let json = JSON(data)
-                        
+                        self.joogpoints.removeAll()
                         for (_, subJson):(String, JSON) in json["user"]["owner_of"] {
-                            self.joogpoints.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), playlistUrl: subJson["establishment_playlist"].string!))
+                            self.joogpoints.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), spotify: subJson["spotify_username"].string!, lastfm: subJson["lastfm_username"].string!, playlistUrl: subJson["establishment_playlist"].string!))
                         }
                         
                         self.tableView.reloadData()
@@ -73,6 +78,10 @@ class MyJoogpointsViewController: UIViewController {
     }
     
     // MARK: - Navigation
+    
+    @IBAction func addJoogpoint(sender: UIButton) {
+        self.performSegueWithIdentifier("RegisterEstablishment", sender: self)
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowMyJoogpoint" {

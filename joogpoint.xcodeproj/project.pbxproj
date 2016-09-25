@@ -16,7 +16,9 @@
 		B16490621CFD04C200BFFDB1 /* SoftLine.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490611CFD04C200BFFDB1 /* SoftLine.otf */; };
 		B16490641CFD058F00BFFDB1 /* Quicksand_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */; };
 		B165D7B91D8A07E000B10BC9 /* VCMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B165D7B81D8A07E000B10BC9 /* VCMapView.swift */; };
+		B166F1CA1D970C5600CB7BF3 /* EditEstablishmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B166F1C91D970C5600CB7BF3 /* EditEstablishmentViewController.swift */; };
 		B17D62791D8E178F0035890B /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17D62781D8E178F0035890B /* UserProfile.swift */; };
+		B19FBF7C1D98668F00E530ED /* EditUserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B19FBF7B1D98668F00E530ED /* EditUserProfileViewController.swift */; };
 		B1A269111D6A0F5900E3E6C9 /* Establishment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A269101D6A0F5900E3E6C9 /* Establishment.swift */; };
 		B1A269131D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */; };
 		B1AE4FB11CFBF2E300A530FC /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */; };
@@ -61,9 +63,11 @@
 		B16490611CFD04C200BFFDB1 /* SoftLine.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SoftLine.otf; path = Resources/SoftLine.otf; sourceTree = "<group>"; };
 		B16490631CFD058F00BFFDB1 /* Quicksand_Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Quicksand_Light.otf; path = Resources/Quicksand_Light.otf; sourceTree = "<group>"; };
 		B165D7B81D8A07E000B10BC9 /* VCMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCMapView.swift; sourceTree = "<group>"; };
+		B166F1C91D970C5600CB7BF3 /* EditEstablishmentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEstablishmentViewController.swift; sourceTree = "<group>"; };
 		B177EACB1D04C46B0098CA0F /* Joogpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Joogpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B177EACC1D04C46B0098CA0F /* joogpointTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = joogpointTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B17D62781D8E178F0035890B /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B19FBF7B1D98668F00E530ED /* EditUserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUserProfileViewController.swift; sourceTree = "<group>"; };
 		B1A269101D6A0F5900E3E6C9 /* Establishment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Establishment.swift; sourceTree = "<group>"; };
 		B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EstablishmentProfileViewController.swift; sourceTree = "<group>"; };
 		B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +142,7 @@
 				B1AE4FB01CFBF2E300A530FC /* SignUpViewController.swift */,
 				B1185F641CFEA691005D203D /* SocialMediaViewController.swift */,
 				B122A6F01D57670B00AD62E2 /* UserProfileViewController.swift */,
+				B19FBF7B1D98668F00E530ED /* EditUserProfileViewController.swift */,
 				B1E53D701D8F13A400D32D0F /* CheckInsViewController.swift */,
 				B1E53D721D8F216A00D32D0F /* VotedSongsViewController.swift */,
 				B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */,
@@ -147,6 +152,7 @@
 				B122A6F21D57679300AD62E2 /* SearchViewController.swift */,
 				B1BC9A2C1D90733400BCACCF /* MyJoogpointsViewController.swift */,
 				B1BC9A2E1D90974F00BCACCF /* MyEstablishmentViewController.swift */,
+				B166F1C91D970C5600CB7BF3 /* EditEstablishmentViewController.swift */,
 				B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */,
 				B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */,
 				B1A269101D6A0F5900E3E6C9 /* Establishment.swift */,
@@ -395,12 +401,14 @@
 			files = (
 				B1A269111D6A0F5900E3E6C9 /* Establishment.swift in Sources */,
 				B122A6F11D57670B00AD62E2 /* UserProfileViewController.swift in Sources */,
+				B19FBF7C1D98668F00E530ED /* EditUserProfileViewController.swift in Sources */,
 				B17D62791D8E178F0035890B /* UserProfile.swift in Sources */,
 				B165D7B91D8A07E000B10BC9 /* VCMapView.swift in Sources */,
 				B1E53D731D8F216A00D32D0F /* VotedSongsViewController.swift in Sources */,
 				B122A6F31D57679300AD62E2 /* SearchViewController.swift in Sources */,
 				B1BC9A2D1D90733400BCACCF /* MyJoogpointsViewController.swift in Sources */,
 				B1185F651CFEA691005D203D /* SocialMediaViewController.swift in Sources */,
+				B166F1CA1D970C5600CB7BF3 /* EditEstablishmentViewController.swift in Sources */,
 				B1E53D751D8F241000D32D0F /* RequestedSongsViewController.swift in Sources */,
 				B1A269131D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift in Sources */,
 				B1F3002C1D92262E00FB6E55 /* PlaylistViewController.swift in Sources */,

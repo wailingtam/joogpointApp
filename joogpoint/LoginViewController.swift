@@ -19,6 +19,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        if let token = dictionary?["token"] as? String {
+            if token != "" {
+                print(token)
+                self.performSegueWithIdentifier("LoginSuccessful", sender: self)
+            }
+        }
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -35,17 +48,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
     }
 
-//    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-//        self.view.endEditing(true)
-//    }
-    
-    /*
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func addBottomLineToTextField(textField : UITextField) {
+        let border = CALayer()
+        let borderWidth = CGFloat(1.0)
+        border.borderColor = UIColor.init(red: 0.87, green: 0.87, blue: 0.87, alpha: 1.0).CGColor
+        border.frame = CGRectMake(0, textField.frame.size.height - borderWidth, textField.frame.size.width, textField.frame.size.height)
+        border.borderWidth = borderWidth
+        textField.layer.addSublayer(border)
+        textField.layer.masksToBounds = true
     }
-    */
     
+    override func viewDidLayoutSubviews() {
+        self.addBottomLineToTextField(usernameTextField)
+        self.addBottomLineToTextField(passwordTextField)
+    }
     
     // MARK: UITextFieldDelegate
     

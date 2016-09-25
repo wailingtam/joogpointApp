@@ -38,13 +38,14 @@ class TrackTableViewCell: UITableViewCell {
     }
     
     @IBAction func voteButton(sender: UIButton) {
+        /*
         let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
         
         let headers = [
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        /*var establishmentUrl = establishment!.url
+        var establishmentUrl = establishment!.url
         let index = establishmentUrl.startIndex.advancedBy(4)
         establishmentUrl.insert("s", atIndex: index)
         
