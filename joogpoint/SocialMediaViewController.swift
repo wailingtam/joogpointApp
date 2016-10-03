@@ -29,7 +29,7 @@ class SocialMediaViewController: UIViewController, UITextFieldDelegate {
         twitterTextField.delegate = self
         spotifyTextField.delegate = self
         
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.DismissKeyboard))
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SocialMediaViewController.DismissKeyboard))
         self.view.addGestureRecognizer(tap)
     }
     

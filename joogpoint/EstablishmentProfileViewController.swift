@@ -131,11 +131,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        var establishmentUrl = establishment!.url
-        let index = establishmentUrl.startIndex.advancedBy(4)
-        establishmentUrl.insert("s", atIndex: index)
-        
-        Alamofire.request(.PUT, establishmentUrl + "check-in/", headers: headers)
+        Alamofire.request(.PUT, establishment!.url + "check-in/", headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -166,7 +162,12 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         cell.titleLabel.text = track.title
         cell.artistLabel.text = track.artist
         cell.votesCountButton.setTitle(String(track.votes!), forState: .Normal)
-        cell.idLabel.text = String(track.id)
+        cell.votesCountButton.tag = indexPath.row
+        cell.votesCountButton.addTarget(self, action: #selector(showVoters), forControlEvents: .TouchUpInside)
+        cell.voteButton.tag = indexPath.row
+        cell.voteButton.addTarget(self, action: #selector(voteSong), forControlEvents: .TouchUpInside)
+        
+        print(cell.voteButton.tag)
         
         return cell
     }
@@ -177,9 +178,37 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
         let currentCell = self.tableView.cellForRowAtIndexPath(indexPath) as! TrackTableViewCell
         
-        print(currentCell.idLabel!.text)
         
     }
+    
+    func showVoters (sender: UIButton) {
+        self.performSegueWithIdentifier("ShowVoters", sender: sender)
+    }
+    
+    func voteSong (sender: UIButton) {
+        
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        let headers = [
+            "Authorization": "Token " + (dictionary?["token"] as! String)
+        ]
+        
+        Alamofire.request(.PUT, "https://joogpoint.herokuapp.com/tracks/" + String(tracks[sender.tag].id) + "/vote/", headers: headers)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+                        print(json)
+                    }
+                    
+                case .Failure(let error):
+                    print(error)
+                }
+        }
+    }
+
     
     // MARK: - Navigation
     
@@ -193,13 +222,17 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     @IBAction func showEstablishmentInMap(sender: UIButton) {
 //        self.performSegueWithIdentifier("ShowEstablishmentInMap", sender: self)
     }
-    /*
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showEstablishmentInMap" {
-                let nextViewController = segue.destinationViewController as! MapViewController
-                nextViewController.focusEstablishment = establishment
+//        if segue.identifier == "showEstablishmentInMap" {
+//                let nextViewController = segue.destinationViewController as! MapViewController
+//                nextViewController.focusEstablishment = establishment
+//        }
+        if segue.identifier == "ShowVoters" {
+            let nextViewController = segue.destinationViewController as! VotersListViewController
+            print(sender!.tag)
+            nextViewController.track = tracks[sender!.tag]
         }
     }
-     */
     
 }

@@ -29,7 +29,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         repeatPasswordTextField.delegate = self
 
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.DismissKeyboard))
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SignUpViewController.DismissKeyboard))
         self.view.addGestureRecognizer(tap)
     }
     

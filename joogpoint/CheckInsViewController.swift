@@ -50,6 +50,16 @@ class CheckInsViewController: UIViewController, UITableViewDelegate {
     @IBAction func backToUserProfile(sender: UIButton) {
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowCheckInEstablishment" {
+            let nextViewController = segue.destinationViewController as! EstablishmentProfileViewController
+            if let selectedEstablCell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedEstablCell)!
+                nextViewController.establishment = checkIns![indexPath.row]
+            }
+        }
+    }
 
     
 }

@@ -19,34 +19,49 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var checkInsButton: UIButton!
     @IBOutlet weak var votedSongsButton: UIButton!
     @IBOutlet weak var requestedSongsButton: UIButton!
+    @IBOutlet weak var editProfileButton: UIButton!
+    @IBOutlet weak var logOutButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
     
     var checkIns = [Establishment]()
     var votedSongs = [Track]()
     var requestedSongs = [Track]()
+    var profileId: String?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        loadProfile()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        if let userProfileId = profileId {
+            editProfileButton.hidden = true
+            logOutButton.hidden = true
+            backButton.hidden = false
+
+            loadProfile(userProfileId)
+        }
+        else {
+            loadProfile("me")
+        }
     }
     
-    func loadProfile() {
+    func loadProfile (userProfileId: String) {
         
         let defaults = NSUserDefaults.standardUserDefaults()
-        
-        if let data = defaults.objectForKey("user_profile") as? NSData {
-            let savedUserProfile = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! UserProfile
+
+        if (userProfileId == "me") {
             
-            usernameLabel.text = savedUserProfile.username
-            self.checkInsButton.setTitle(savedUserProfile.checkedIn, forState: .Normal)
-            self.votedSongsButton.setTitle(savedUserProfile.voted, forState: .Normal)
-            self.requestedSongsButton.setTitle(savedUserProfile.requested, forState: .Normal)
+            if let data = defaults.objectForKey("user_profile") as? NSData {
+                let savedUserProfile = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! UserProfile
+                
+                usernameLabel.text = savedUserProfile.username
+                self.checkInsButton.setTitle(savedUserProfile.checkedIn, forState: .Normal)
+                self.votedSongsButton.setTitle(savedUserProfile.voted, forState: .Normal)
+                self.requestedSongsButton.setTitle(savedUserProfile.requested, forState: .Normal)
+            }
         }
         
         let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
@@ -55,7 +70,7 @@ class UserProfileViewController: UIViewController {
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
         
-        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/profiles/me/", headers: headers)
+        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/profiles/" + userProfileId + "/", headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {
@@ -63,23 +78,31 @@ class UserProfileViewController: UIViewController {
                     if let data = response.result.value {
                         let json = JSON(data)
                         
-                        let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                        var pUrl = json["url"].string!
+                        let index = pUrl.startIndex.advancedBy(4)
+                        pUrl.insert("s", atIndex: index)
                         
+                        let userProfile = UserProfile(url: pUrl, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                        
+                        self.usernameLabel.text = userProfile.username
                         self.checkInsButton.setTitle(userProfile.checkedIn, forState: .Normal)
                         self.votedSongsButton.setTitle(userProfile.voted, forState: .Normal)
                         self.requestedSongsButton.setTitle(userProfile.requested, forState: .Normal)
                         
-                        let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
-                        defaults.setObject(encodedData, forKey: "user_profile")
-                        
-                        defaults.synchronize()
+                        if (userProfileId == "me") {
+                            let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
+                            defaults.removeObjectForKey("user_profile")
+                            defaults.setObject(encodedData, forKey: "user_profile")
+                            
+                            defaults.synchronize()
+                        }
                         
                         self.checkIns.removeAll()
                         self.votedSongs.removeAll()
                         self.requestedSongs.removeAll()
                         
                         for (_, subJson):(String, JSON) in json["user"]["checked_in"] {
-                            self.checkIns.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!)))
+                            self.checkIns.append(Establishment(url: subJson["url"].string!, name: subJson["name"].string!, address: subJson["address"].string!, postcode: subJson["postcode"].string!, city: subJson["city"].string!, country: subJson["country"].string!, coordinate: CLLocationCoordinate2D(latitude: subJson["latitude"].double!, longitude: subJson["longitude"].double!), playlistUrl: subJson["establishment_playlist"].string!))
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["voted"] {
@@ -116,8 +139,15 @@ class UserProfileViewController: UIViewController {
         self.performSegueWithIdentifier("EditUserProfile", sender: self)
     }
     
+    @IBAction func backToVotersOrEstablishment(sender: UIButton) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     @IBAction func logOut(sender: UIButton) {
         do {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.removeObjectForKey("user_profile")
+            
             try Locksmith.deleteDataForUserAccount("myUserAccount")
         }
         catch {

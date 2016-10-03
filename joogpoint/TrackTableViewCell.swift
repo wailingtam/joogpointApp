@@ -17,7 +17,7 @@ class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var votesCountButton: UIButton!
-    @IBOutlet weak var idLabel: UILabel!
+    @IBOutlet weak var voteButton: UIButton!
     
     @IBOutlet weak var trackImage2: UIImageView!
     @IBOutlet weak var titleLabel2: UILabel!
@@ -37,31 +37,4 @@ class TrackTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBAction func voteButton(sender: UIButton) {
-        /*
-        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
-        
-        let headers = [
-            "Authorization": "Token " + (dictionary?["token"] as! String)
-        ]
-        
-        var establishmentUrl = establishment!.url
-        let index = establishmentUrl.startIndex.advancedBy(4)
-        establishmentUrl.insert("s", atIndex: index)
-        
-        Alamofire.request(.PUT, establishmentUrl + "check-in/", headers: headers)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .Success:
-                    if let data = response.result.value {
-                        let json = JSON(data)
-                        print(json)
-                    }
-                    
-                case .Failure(let error):
-                    print(error)
-                }
-        }*/
-    }
 }

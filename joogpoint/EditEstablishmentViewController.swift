@@ -72,7 +72,7 @@ class EditEstablishmentViewController: UIViewController, UITextFieldDelegate {
         
         configureView()
         
-        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.DismissKeyboard))
+        let tap:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(EditEstablishmentViewController.DismissKeyboard))
         self.view.addGestureRecognizer(tap)
     }
     
@@ -106,12 +106,11 @@ class EditEstablishmentViewController: UIViewController, UITextFieldDelegate {
         let nextTag: NSInteger = textField.tag + 1
         
         // Try to find next responder
-        if let nextResponder: UIResponder! = textField.superview!.viewWithTag(nextTag) {
+        if let nextResponder: UIResponder! = textField.superview!.superview!.superview!.viewWithTag(nextTag) {
             nextResponder.becomeFirstResponder()
         }
         else {
             textField.resignFirstResponder()
-            // saveProfile (nil)
         }
         // returning the value true indicates that the text field should respond to the user pressing the Return key by dismissing the keyboard
         return true

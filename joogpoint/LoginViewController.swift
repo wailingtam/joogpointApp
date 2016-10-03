@@ -69,7 +69,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let nextTag: NSInteger = textField.tag + 1
         
         // Try to find next responder
-        if let nextResponder: UIResponder! = textField.superview!.viewWithTag(nextTag) {
+        if let nextResponder: UIResponder! = textField.superview!.superview!.viewWithTag(nextTag) {
             nextResponder.becomeFirstResponder()
         }
         else {
@@ -165,7 +165,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
                             let defaults = NSUserDefaults.standardUserDefaults()
                             
-                            let userProfile = UserProfile(url: json["url"].string!, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
+                            var pUrl = json["url"].string!
+                            let index = pUrl.startIndex.advancedBy(4)
+                            pUrl.insert("s", atIndex: index)
+                            
+                            let userProfile = UserProfile(url: pUrl, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
                             
                             let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
                             defaults.setObject(encodedData, forKey: "user_profile")
