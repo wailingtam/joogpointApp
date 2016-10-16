@@ -46,6 +46,28 @@ class PlaylistViewController: UIViewController {
         loadPlaylist()
     }
     
+    func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
+        Alamofire.request(.GET, imageUrl).response() {
+            (_, _, data, _) in
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                completion(image!)
+            }
+        }
+    }
+    
+    func loadImages() {
+        for track in tracks {
+            if let coverUri = track.coverUri {
+                print (coverUri)
+                self.downloadImage(coverUri) { image in
+                    track.cover = image
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
     func loadPlaylist() {
         
         let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
@@ -64,12 +86,14 @@ class PlaylistViewController: UIViewController {
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["playlist_of"] {
                             if (subJson["in_playlist"].boolValue) {
-                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
+                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!, order: subJson["order"].int!, requestUserId: subJson["request_user_id"].int!, coverUri: subJson["cover_image_url"].string!))
                             }
                         }
+                        self.tracks.sortInPlace({ $0.order < $1.order })
                     }
                     
                     self.tableView.reloadData()
+                    self.loadImages()
                     
                 case .Failure(let error):
                     print(error)
@@ -89,18 +113,47 @@ class PlaylistViewController: UIViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackTableViewCell
         let track: Track
         track = tracks[indexPath.row]
-        cell.titleLabel2.text = track.title
-        cell.artistLabel2.text = track.artist
-        cell.votesCountButton2.setTitle(String(track.votes!), forState: .Normal)
+        cell.titleLabel.text = track.title
+        cell.artistLabel.text = track.artist
+        cell.votesCountButton.tag = indexPath.row
+        cell.votesCountButton.setTitle(String(track.votes!), forState: .Normal)
+        cell.votesCountButton.addTarget(self, action: #selector(showVoters), forControlEvents: .TouchUpInside)
+        cell.requestedButton.tag = indexPath.row
+        if track.requestUserId == -1 {
+            cell.requestedButton.hidden = true
+        }
+        else {
+            cell.requestedButton.addTarget(self, action: #selector(showRequestUserProfile), forControlEvents: .TouchUpInside)
+        }
+        cell.trackImage?.image = track.cover
         
         return cell
     }
     
+    func showVoters (sender: UIButton) {
+        self.performSegueWithIdentifier("ShowVoters", sender: sender)
+    }
+    
+    func showRequestUserProfile (sender: UIButton) {
+        self.performSegueWithIdentifier("ShowRequestUserProfile", sender: sender)
+    }
     
     // MARK: - Navigation
     
     @IBAction func backToMyEstablishment(sender: UIButton) {
         self.navigationController?.popViewControllerAnimated(true)
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowVoters" {
+            let nextViewController = segue.destinationViewController as! VotersListViewController
+            nextViewController.track = tracks[sender!.tag]
+        }
+        else if segue.identifier == "ShowRequestUserProfile" {
+            let nextViewController = segue.destinationViewController as! UserProfileViewController
+            let track = tracks[sender!.tag]
+            nextViewController.profileId = String(track.requestUserId!)
+        }
     }
 
     

@@ -242,22 +242,34 @@ class MyEstablishmentViewController: UIViewController {
             self.showAlert("Remove Playlist", message: "You don't have a playlist set.", buttonTitle: "Ok")
         }
         else {
-            let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+            let alert = UIAlertController(title: "Remove playlist", message: "Are you completely sure?", preferredStyle: UIAlertControllerStyle.Alert)
             
-            let headers = [
-                "Authorization": "Token " + (dictionary?["token"] as! String)
-            ]
-            
-            Alamofire.request(.PUT, establishment!.playlistUrl! + "clear/", headers: headers)
-                .validate(statusCode: 200..<300)
-                .response { response in
-                    // check if there is a playlist set
-                    
-                    self.playlist.spotifyUrl = ""
-                    self.playlist.originalCreator = ""
-                    self.playlist.originalSpotifyUrl = ""
-                    self.showAlert("Remove Playlist", message: "Playlist removed! Go set a new one!🎵", buttonTitle: "Ok")
+            let confirmAction = UIAlertAction(title: "Yes", style: .Default) { (_) in
+                let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+                
+                let headers = [
+                    "Authorization": "Token " + (dictionary?["token"] as! String)
+                ]
+                
+                Alamofire.request(.PUT, self.establishment!.playlistUrl! + "clear/", headers: headers)
+                    .validate(statusCode: 200..<300)
+                    .response { response in
+                        // check if there is a playlist set
+                        
+                        self.playlist.spotifyUrl = ""
+                        self.playlist.originalCreator = ""
+                        self.playlist.originalSpotifyUrl = ""
+                        
+                        self.showAlert("Remove Playlist", message: "Playlist removed! Go set a new one!🎵", buttonTitle: "Ok")
+                }
             }
+            
+            let cancelAction = UIAlertAction(title: "No", style: .Cancel) { (_) in }
+            
+            alert.addAction(confirmAction)
+            alert.addAction(cancelAction)
+            
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
 

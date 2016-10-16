@@ -37,6 +37,7 @@
 		B1E53D731D8F216A00D32D0F /* VotedSongsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E53D721D8F216A00D32D0F /* VotedSongsViewController.swift */; };
 		B1E53D751D8F241000D32D0F /* RequestedSongsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */; };
 		B1F3002C1D92262E00FB6E55 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */; };
+		B1FB68DF1DA324EC008377F9 /* SpotifySearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FB68DE1DA324EC008377F9 /* SpotifySearchViewController.swift */; };
 		E1D97FF08D96FC72BDDB96D9 /* Pods_joogpointTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C7EED3EB8441D0BF4C8F76 /* Pods_joogpointTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +90,7 @@
 		B1E53D721D8F216A00D32D0F /* VotedSongsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VotedSongsViewController.swift; sourceTree = "<group>"; };
 		B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestedSongsViewController.swift; sourceTree = "<group>"; };
 		B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
+		B1FB68DE1DA324EC008377F9 /* SpotifySearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifySearchViewController.swift; sourceTree = "<group>"; };
 		B362476DEB79F1EE6FD63A12 /* Pods-joogpointTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-joogpointTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-joogpointTests/Pods-joogpointTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,13 +152,14 @@
 				B1E53D741D8F241000D32D0F /* RequestedSongsViewController.swift */,
 				B122A6EE1D5766EB00AD62E2 /* MapViewController.swift */,
 				B165D7B81D8A07E000B10BC9 /* VCMapView.swift */,
-				B122A6F21D57679300AD62E2 /* SearchViewController.swift */,
 				B1BC9A2C1D90733400BCACCF /* MyJoogpointsViewController.swift */,
 				B1BC9A2E1D90974F00BCACCF /* MyEstablishmentViewController.swift */,
 				B166F1C91D970C5600CB7BF3 /* EditEstablishmentViewController.swift */,
 				B1F3002B1D92262E00FB6E55 /* PlaylistViewController.swift */,
 				B1A269121D6A65D100E3E6C9 /* EstablishmentProfileViewController.swift */,
 				B19FBF7D1D989B8200E530ED /* VotersListViewController.swift */,
+				B122A6F21D57679300AD62E2 /* SearchViewController.swift */,
+				B1FB68DE1DA324EC008377F9 /* SpotifySearchViewController.swift */,
 				B17D62781D8E178F0035890B /* UserProfile.swift */,
 				B1A269101D6A0F5900E3E6C9 /* Establishment.swift */,
 				B1CEC8201D8B53D900B92A96 /* TrackTableViewCell.swift */,
@@ -423,6 +426,7 @@
 				B1CEC8231D8B53F900B92A96 /* Track.swift in Sources */,
 				B122A6EF1D5766EB00AD62E2 /* MapViewController.swift in Sources */,
 				B1BC9A2F1D90974F00BCACCF /* MyEstablishmentViewController.swift in Sources */,
+				B1FB68DF1DA324EC008377F9 /* SpotifySearchViewController.swift in Sources */,
 				B1D7FD231CF8745500671183 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class RequestedSongsViewController: UIViewController, UITableViewDelegate {
     
@@ -28,6 +29,27 @@ class RequestedSongsViewController: UIViewController, UITableViewDelegate {
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
         
+    }
+    
+    func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
+        Alamofire.request(.GET, imageUrl).response() {
+            (_, _, data, _) in
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                completion(image!)
+            }
+        }
+    }
+    
+    func loadImages() {
+        for track in requestedSongs! {
+            if let coverUri = track.coverUri {
+                self.downloadImage(coverUri) { image in
+                    track.cover = image
+                    self.tableView.reloadData()
+                }
+            }
+        }
     }
     
     // MARK: - Table View

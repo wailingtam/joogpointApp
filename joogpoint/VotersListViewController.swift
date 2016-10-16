@@ -42,6 +42,9 @@ class VotersListViewController: UIViewController {
         super.viewWillAppear(animated)
         configureView()
         loadVoters()
+        
+        self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, -12);
+        
     }
 
     override func viewDidLoad() {
@@ -56,8 +59,8 @@ class VotersListViewController: UIViewController {
         let headers = [
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
-        print(String(track!.id))
-        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/tracks/" + String(track!.id) + "/", headers: headers)
+        //print(String(track!.id!))
+        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/tracks/" + String(track!.id!) + "/", headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {

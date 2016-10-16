@@ -22,6 +22,10 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var editProfileButton: UIButton!
     @IBOutlet weak var logOutButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var lineLabel: UILabel!
+    @IBOutlet weak var spotifyLabel: UILabel!
+    @IBOutlet weak var twitterLabel: UILabel!
+    @IBOutlet weak var facebookLabel: UILabel!
     
     var checkIns = [Establishment]()
     var votedSongs = [Track]()
@@ -31,21 +35,23 @@ class UserProfileViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
         if let userProfileId = profileId {
             editProfileButton.hidden = true
             logOutButton.hidden = true
             backButton.hidden = false
-
+            
             loadProfile(userProfileId)
         }
         else {
             loadProfile("me")
         }
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        lineLabel.layer.borderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1).CGColor
+        lineLabel.layer.borderWidth = 3.0
     }
     
     func loadProfile (userProfileId: String) {
@@ -61,6 +67,24 @@ class UserProfileViewController: UIViewController {
                 self.checkInsButton.setTitle(savedUserProfile.checkedIn, forState: .Normal)
                 self.votedSongsButton.setTitle(savedUserProfile.voted, forState: .Normal)
                 self.requestedSongsButton.setTitle(savedUserProfile.requested, forState: .Normal)
+                if savedUserProfile.spotifyUsername.characters.count == 0 {
+                    self.spotifyLabel.text = "-"
+                }
+                else {
+                    self.spotifyLabel.text = savedUserProfile.spotifyUsername
+                }
+                if savedUserProfile.twitterUsername.characters.count == 0 {
+                    self.twitterLabel.text = "-"
+                }
+                else {
+                    self.twitterLabel.text = savedUserProfile.twitterUsername
+                }
+                if savedUserProfile.facebookUsername.characters.count == 0 {
+                    self.facebookLabel.text = "-"
+                }
+                else {
+                    self.facebookLabel.text = savedUserProfile.facebookUsername
+                }
             }
         }
         
@@ -84,7 +108,28 @@ class UserProfileViewController: UIViewController {
                         
                         let userProfile = UserProfile(url: pUrl, username: json["user"]["username"].string!, email: json["user"]["email"].string!, checkedIn: String(json["user"]["checked_in"].array!.count), voted: String(json["user"]["voted"].array!.count), requested: String(json["user"]["requested"].array!.count), myEstablishments: json["user"]["owner_of"].array!.count, spotifyUsername: json["spotify_username"].string!, facebookUsername: json["facebook_username"].string!, twitterUsername: json["twitter_username"].string!, favArtists: json["fav_artists"].string!, favGenres: json["fav_genres"].string!)
                         
-                        self.usernameLabel.text = userProfile.username
+                        if (userProfileId != "me") {
+                            self.usernameLabel.text = userProfile.username
+                            if userProfile.spotifyUsername.characters.count == 0 {
+                                self.spotifyLabel.text = "-"
+                            }
+                            else {
+                                self.spotifyLabel.text = userProfile.spotifyUsername
+                            }
+                            if userProfile.twitterUsername.characters.count == 0 {
+                                self.twitterLabel.text = "-"
+                            }
+                            else {
+                                self.twitterLabel.text = userProfile.twitterUsername
+                            }
+                            if userProfile.facebookUsername.characters.count == 0 {
+                                self.facebookLabel.text = "-"
+                            }
+                            else {
+                                self.facebookLabel.text = userProfile.facebookUsername
+                            }
+                        }
+                        
                         self.checkInsButton.setTitle(userProfile.checkedIn, forState: .Normal)
                         self.votedSongsButton.setTitle(userProfile.voted, forState: .Normal)
                         self.requestedSongsButton.setTitle(userProfile.requested, forState: .Normal)
@@ -106,11 +151,11 @@ class UserProfileViewController: UIViewController {
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["voted"] {
-                            self.votedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!))
+                            self.votedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!, coverUri: subJson["cover_image_url"].string!))
                         }
                         
                         for (_, subJson):(String, JSON) in json["user"]["requested"] {
-                            self.requestedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!))
+                            self.requestedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!, coverUri: subJson["cover_image_url"].string!))
                         }
                     }
                     

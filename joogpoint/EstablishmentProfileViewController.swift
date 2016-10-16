@@ -20,23 +20,28 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentSongLabel: UILabel!
     @IBOutlet weak var currentArtistLabel: UILabel!
+    @IBOutlet weak var songPlayingImage: UIImageView!
+    @IBOutlet weak var requestButton: UIButton!
+    @IBOutlet weak var explicitPlaylistLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
     
     var tracks = [Track]()
 
+    var currentSongOrder = -1
+    
     var establishment: Establishment? {
         didSet {
             configureView()
         }
     }
-    /*
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBarHidden = true
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
-    */
+ 
     func configureView() {
         if let profileEstablishment = establishment {
             if let nameLabel = nameLabel, addressLabel = addressLabel, cityLabel = cityLabel {
@@ -50,17 +55,20 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBarHidden = true
         configureView()
         
-        self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, -20);
         
-        getCurrentSong()
+        getCurrentSong() { current in
+            self.loadPlaylist()
+        }
         
-        loadPlaylist()
+        
         
     }
     
-    func getCurrentSong() {
+    func getCurrentSong(completion: (Bool) -> ()) {
         
         let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
         
@@ -75,19 +83,56 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
                 case .Success:
                     if let data = response.result.value {
                         let json = JSON(data)
-                        if (!json["now_playing"]) {
+                        if (json["now_playing"]) {
                             self.currentSongLabel.text = json["name"].string!
                             self.currentArtistLabel.text = json["artist"].string!
+                            
+                            if (json["spotify_uri"].string!.characters.count == 0) {
+                                self.requestButton.enabled = false
+                            }
+                            else {
+                                self.currentSongOrder = json["order"].int!
+                            }
+                        }
+                        else {
+                            self.currentSongLabel.text = "No song is currently playing"
+                            self.currentArtistLabel.text = "-"
+                            self.songPlayingImage.image = UIImage(named: "No song playing")!
+                            self.requestButton.enabled = false
                         }
                     }
+                    completion(true)
                     
                 case .Failure(let error):
                     print(error)
+                    completion(false)
                 }
         }
 
 
     }
+    
+    func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
+        Alamofire.request(.GET, imageUrl).response() {
+            (_, _, data, _) in
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                completion(image!)
+            }
+        }
+    }
+    
+    func loadImages() {
+        for track in tracks {
+            if let coverUri = track.coverUri {
+                self.downloadImage(coverUri) { image in
+                    track.cover = image
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
     
     func loadPlaylist() {
         
@@ -105,14 +150,23 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
                     if let data = response.result.value {
                         self.tracks.removeAll()
                         let json = JSON(data)
+                        if json["explicit_lyrics"].bool! {
+                            self.explicitPlaylistLabel.hidden = false
+                        }
                         for (_, subJson):(String, JSON) in json["playlist_of"] {
                             if (subJson["in_playlist"].boolValue) {
-                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!))
+                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!, order: subJson["order"].int!, requestUserId: subJson["request_user_id"].int!, coverUri: subJson["cover_image_url"].string!))
                             }
                         }
+                        self.tracks.sortInPlace({ $0.order < $1.order })
+                        
+                        /*if self.tracks.count >= 100 {
+                            self.requestButton.enabled = false
+                        }*/
                     }
                     
                     self.tableView.reloadData()
+                    self.loadImages()
                     
                 case .Failure(let error):
                     print(error)
@@ -159,30 +213,51 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackTableViewCell
         let track: Track
         track = tracks[indexPath.row]
+        
+        // reset default values for reuse
+        cell.voteButton.hidden = false
+        cell.voteButton.setImage(UIImage(named: "Thumb Up")!, forState: .Normal)
+        cell.voteButton.removeTarget(self, action: #selector(showVoters), forControlEvents: .TouchUpInside)
+        
         cell.titleLabel.text = track.title
         cell.artistLabel.text = track.artist
         cell.votesCountButton.setTitle(String(track.votes!), forState: .Normal)
         cell.votesCountButton.tag = indexPath.row
         cell.votesCountButton.addTarget(self, action: #selector(showVoters), forControlEvents: .TouchUpInside)
         cell.voteButton.tag = indexPath.row
-        cell.voteButton.addTarget(self, action: #selector(voteSong), forControlEvents: .TouchUpInside)
+        if (currentSongOrder == -1) {
+            cell.voteButton.enabled = false
+        }
+        else {
+            if (track.order! < currentSongOrder) {
+                cell.voteButton.hidden = true
+            }
+            else if (track.order! == currentSongOrder) {
+                cell.voteButton.setImage(UIImage(named: "currentSongPlaylist")!, forState: .Normal)
+            }
+            else {
+                cell.voteButton.addTarget(self, action: #selector(voteSong), forControlEvents: .TouchUpInside)
+            }
+        }
+        cell.requestedButton.tag = indexPath.row
+        if track.requestUserId == -1 {
+            cell.requestedButton.hidden = true
+        }
+        else {
+            cell.requestedButton.addTarget(self, action: #selector(showRequestUserProfile), forControlEvents: .TouchUpInside)
+        }
         
-        print(cell.voteButton.tag)
+        cell.trackImage?.image = track.cover
         
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        //let indexPath = self.tableView.indexPathForSelectedRow()
-        
-        let currentCell = self.tableView.cellForRowAtIndexPath(indexPath) as! TrackTableViewCell
-        
-        
-    }
-    
     func showVoters (sender: UIButton) {
         self.performSegueWithIdentifier("ShowVoters", sender: sender)
+    }
+    
+    func showRequestUserProfile (sender: UIButton) {
+        self.performSegueWithIdentifier("ShowRequestUserProfile", sender: sender)
     }
     
     func voteSong (sender: UIButton) {
@@ -192,16 +267,25 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         let headers = [
             "Authorization": "Token " + (dictionary?["token"] as! String)
         ]
-        
-        Alamofire.request(.PUT, "https://joogpoint.herokuapp.com/tracks/" + String(tracks[sender.tag].id) + "/vote/", headers: headers)
+        //print("Selected track id: " + String(tracks[sender.tag].id!))
+        Alamofire.request(.PUT, "https://joogpoint.herokuapp.com/tracks/" + String(tracks[sender.tag].id!) + "/vote/", headers: headers)
             .validate()
             .responseJSON { response in
                 switch response.result {
                 case .Success:
                     if let data = response.result.value {
+                        self.tracks.removeAll()
                         let json = JSON(data)
-                        print(json)
+                        for (_, subJson):(String, JSON) in json["playlist_of"] {
+                            if (subJson["in_playlist"].boolValue) {
+                                self.tracks.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, votes: subJson["votes"].int!, order: subJson["order"].int!, requestUserId: subJson["request_user_id"].int!, coverUri: subJson["cover_image_url"].string!))
+                            }
+                        }
+                        self.tracks.sortInPlace({ $0.order < $1.order })
                     }
+                    
+                    self.tableView.reloadData()
+                    self.loadImages()
                     
                 case .Failure(let error):
                     print(error)
@@ -217,6 +301,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     }
     
     @IBAction func requestSong(sender: UIButton) {
+        self.performSegueWithIdentifier("SearchRequestSong", sender: self)
     }
     
     @IBAction func showEstablishmentInMap(sender: UIButton) {
@@ -230,9 +315,16 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
 //        }
         if segue.identifier == "ShowVoters" {
             let nextViewController = segue.destinationViewController as! VotersListViewController
-            print(sender!.tag)
             nextViewController.track = tracks[sender!.tag]
         }
+        else if segue.identifier == "ShowRequestUserProfile" {
+            let nextViewController = segue.destinationViewController as! UserProfileViewController
+            let track = tracks[sender!.tag]
+            nextViewController.profileId = String(track.requestUserId!)
+        }
+        else if segue.identifier == "SearchRequestSong" {
+            let nextViewController = segue.destinationViewController as! SpotifySearchViewController
+            nextViewController.playlistUrl = establishment?.playlistUrl
+        }
     }
-    
 }

@@ -18,6 +18,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     var currentAnnotations = [MKAnnotation]()
     
+    var firstRun: Bool = true
+    
     // MARK: - location manager to authorize user location for Maps app
     var locationManager = CLLocationManager()
     
@@ -70,7 +72,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        firstRun = true
         // set initial location in Barcelona
         let initialLocation = CLLocation(latitude: 41.387015, longitude: 2.169908)
         
@@ -99,7 +101,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate
         
         print("locations = \(locValue.latitude) \(locValue.longitude)")
-        centerMapOnLocation(CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
+        if (firstRun) {
+            centerMapOnLocation(CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
+            firstRun = false
+        }
     }
     
     func loadEstablishments(completion : (Array<Establishment>) -> ()){
