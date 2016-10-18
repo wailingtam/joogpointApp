@@ -129,7 +129,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         var alertMessage = ""
                         if let data = response.data {
                             let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
-                            if errorMessage.rangeOfString("Unable to log in with provided credentials.") != nil {                            alertMessage = "Incorrect username or password."
+                            if errorMessage.rangeOfString("Unable to log in with provided credentials.") != nil {
+                                alertMessage = "Incorrect username or password."
                             }
                             // TODO: Deal with other errors
                         }

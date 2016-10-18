@@ -35,6 +35,9 @@ class VotersListViewController: UIViewController {
             if let trackArtistLabel = artistLabel {
                 trackArtistLabel.text = trackInfo.artist
             }
+            if let trackCoverImage = trackImage {
+                trackCoverImage.image = trackInfo.cover
+            }
         }
     }
 

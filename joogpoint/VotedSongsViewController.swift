@@ -28,28 +28,6 @@ class VotedSongsViewController: UIViewController, UITableViewDelegate {
         configureView()
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
-        
-    }
-    
-    func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
-        Alamofire.request(.GET, imageUrl).response() {
-            (_, _, data, _) in
-            if let imageData = data {
-                let image = UIImage(data: imageData)
-                completion(image!)
-            }
-        }
-    }
-    
-    func loadImages() {
-        for track in votedSongs! {
-            if let coverUri = track.coverUri {
-                self.downloadImage(coverUri) { image in
-                    track.cover = image
-                    self.tableView.reloadData()
-                }
-            }
-        }
     }
     
     // MARK: - Table View
@@ -59,11 +37,12 @@ class VotedSongsViewController: UIViewController, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackTableViewCell
         let track: Track
         track = votedSongs![indexPath.row]
-        cell.textLabel?.text = track.title
-        cell.detailTextLabel?.text = track.artist
+        cell.titleLabel?.text = track.title
+        cell.artistLabel?.text = track.artist
+        cell.trackImage?.image = track.cover
         return cell
     }
     

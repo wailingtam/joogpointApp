@@ -21,12 +21,15 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
     @IBOutlet weak var currentSongLabel: UILabel!
     @IBOutlet weak var currentArtistLabel: UILabel!
     @IBOutlet weak var songPlayingImage: UIImageView!
+    @IBOutlet weak var checkInButton: UIButton!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var explicitPlaylistLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
     
     var tracks = [Track]()
+    var votedSongsIds = [Int]()
+    var checkedIn = false
 
     var currentSongOrder = -1
     
@@ -60,6 +63,8 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, -20);
         
+        loadProfile()
+        
         getCurrentSong() { current in
             self.loadPlaylist()
         }
@@ -68,6 +73,45 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
     }
     
+    func loadProfile () {
+        
+        let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
+        
+        let headers = [
+            "Authorization": "Token " + (dictionary?["token"] as! String)
+        ]
+        
+        Alamofire.request(.GET, "https://joogpoint.herokuapp.com/profiles/me/", headers: headers)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let data = response.result.value {
+                        let json = JSON(data)
+                        
+                        let endIndex = self.establishment!.url.endIndex.advancedBy(-2)
+                        let establishmentId = String(self.establishment!.url[endIndex])
+                        for (_, subJson):(String, JSON) in json["user"]["checked_in"] {
+                            let endIndex = subJson["url"].string!.endIndex.advancedBy(-2)
+                            if establishmentId == String(subJson["url"].string![endIndex]) {
+                                self.checkInButton.setImage(UIImage(named: "checkedIn"), forState: .Normal)
+                                self.checkedIn = true
+                                break
+                            }
+                        }
+                        
+                        for (_, subJson):(String, JSON) in json["user"]["voted"] {
+                            self.votedSongsIds.append(subJson["id"].int!)
+                        }
+                    }
+                    
+                case .Failure(let error):
+                    print(error)
+                }
+        }
+        
+    }
+
     func getCurrentSong(completion: (Bool) -> ()) {
         
         let dictionary = Locksmith.loadDataForUserAccount("myUserAccount")
@@ -192,6 +236,13 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
                 case .Success:
                     if let data = response.result.value {
                         let json = JSON(data)
+                        self.checkedIn = !self.checkedIn
+                        if self.checkedIn {
+                            self.checkInButton.setImage(UIImage(named: "checkedIn"), forState: .Normal)
+                        }
+                        else {
+                            self.checkInButton.setImage(UIImage(named: "checkedInNot"), forState: .Normal)
+                        }
                         print(json)
                     }
                     
@@ -216,7 +267,8 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
         // reset default values for reuse
         cell.voteButton.hidden = false
-        cell.voteButton.setImage(UIImage(named: "Thumb Up")!, forState: .Normal)
+        cell.voteButton.setImage(UIImage(named: "emptyThumbUp")!, forState: .Normal)
+        cell.voteButton.enabled = true
         cell.voteButton.removeTarget(self, action: #selector(showVoters), forControlEvents: .TouchUpInside)
         
         cell.titleLabel.text = track.title
@@ -249,6 +301,11 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
         
         cell.trackImage?.image = track.cover
         
+        if votedSongsIds.contains(track.id!) {
+            cell.voteButton.setImage(UIImage(named: "Thumb Up"), forState: .Normal)
+            cell.voteButton.enabled = false
+        }
+        
         return cell
     }
     
@@ -274,6 +331,7 @@ class EstablishmentProfileViewController: UIViewController, UITableViewDelegate,
                 switch response.result {
                 case .Success:
                     if let data = response.result.value {
+                        self.votedSongsIds.append(self.tracks[sender.tag].id!)
                         self.tracks.removeAll()
                         let json = JSON(data)
                         for (_, subJson):(String, JSON) in json["playlist_of"] {

@@ -23,9 +23,14 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var logOutButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var lineLabel: UILabel!
+    @IBOutlet weak var lineLabel2: UILabel!
     @IBOutlet weak var spotifyLabel: UILabel!
     @IBOutlet weak var twitterLabel: UILabel!
     @IBOutlet weak var facebookLabel: UILabel!
+    @IBOutlet weak var recentVotesLabel: UILabel!
+    @IBOutlet weak var favArtistsLabel: UILabel!
+    @IBOutlet weak var favArtistsTextView: UITextView!
+    @IBOutlet weak var favGenresTextView: UITextView!
     
     var checkIns = [Establishment]()
     var votedSongs = [Track]()
@@ -52,6 +57,53 @@ class UserProfileViewController: UIViewController {
         super.viewDidLoad()
         lineLabel.layer.borderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1).CGColor
         lineLabel.layer.borderWidth = 3.0
+        lineLabel2.layer.borderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1).CGColor
+        lineLabel2.layer.borderWidth = 3.0
+        favArtistsTextView.textContainerInset = UIEdgeInsetsZero;
+        favGenresTextView.textContainerInset = UIEdgeInsetsZero;
+    }
+    
+    
+    func loadVotedSongs() {
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width
+        let coverSize = screenWidth/6
+        let startYPosition = recentVotesLabel.convertPoint(spotifyLabel.center, toView: self.view)
+        let endYPosition = favArtistsTextView.convertPoint(spotifyLabel.center, toView: self.view)
+        let rows = (endYPosition.y - startYPosition.y - 20) / coverSize
+        
+        for i in 0..<Int(rows) {
+            for j in 0..<6 {
+                if (i*5+j < self.votedSongs.count) {
+                    if let cover = self.votedSongs.reverse()[i*5+j].cover {
+                        let imageView = UIImageView(image: cover)
+                        imageView.frame = CGRect(x: CGFloat(j)*coverSize, y: startYPosition.y+20+CGFloat(i)*coverSize, width: coverSize, height: coverSize)
+                        view.addSubview(imageView)
+                    }
+                }
+            }
+        }
+    }
+    
+    func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
+        Alamofire.request(.GET, imageUrl).response() {
+            (_, _, data, _) in
+            if let imageData = data {
+                let image = UIImage(data: imageData)
+                completion(image!)
+            }
+        }
+    }
+    
+    func loadImages() {
+        for track in self.votedSongs {
+            if let coverUri = track.coverUri {
+                self.downloadImage(coverUri) { image in
+                    track.cover = image
+                    self.loadVotedSongs()
+                }
+            }
+        }
     }
     
     func loadProfile (userProfileId: String) {
@@ -67,6 +119,9 @@ class UserProfileViewController: UIViewController {
                 self.checkInsButton.setTitle(savedUserProfile.checkedIn, forState: .Normal)
                 self.votedSongsButton.setTitle(savedUserProfile.voted, forState: .Normal)
                 self.requestedSongsButton.setTitle(savedUserProfile.requested, forState: .Normal)
+                self.favArtistsTextView.text = savedUserProfile.favArtists
+                self.favGenresTextView.text = savedUserProfile.favGenres
+                
                 if savedUserProfile.spotifyUsername.characters.count == 0 {
                     self.spotifyLabel.text = "-"
                 }
@@ -133,6 +188,8 @@ class UserProfileViewController: UIViewController {
                         self.checkInsButton.setTitle(userProfile.checkedIn, forState: .Normal)
                         self.votedSongsButton.setTitle(userProfile.voted, forState: .Normal)
                         self.requestedSongsButton.setTitle(userProfile.requested, forState: .Normal)
+                        self.favArtistsTextView.text = userProfile.favArtists
+                        self.favGenresTextView.text = userProfile.favGenres
                         
                         if (userProfileId == "me") {
                             let encodedData = NSKeyedArchiver.archivedDataWithRootObject(userProfile)
@@ -157,6 +214,8 @@ class UserProfileViewController: UIViewController {
                         for (_, subJson):(String, JSON) in json["user"]["requested"] {
                             self.requestedSongs.append(Track(id: subJson["id"].int!, title: subJson["title"].string!, artist: subJson["artist"].string!, establishment: subJson["establishment"].string!, coverUri: subJson["cover_image_url"].string!))
                         }
+                        
+                        self.loadImages()
                     }
                     
                 case .Failure(let error):

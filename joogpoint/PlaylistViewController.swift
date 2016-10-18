@@ -59,7 +59,6 @@ class PlaylistViewController: UIViewController {
     func loadImages() {
         for track in tracks {
             if let coverUri = track.coverUri {
-                print (coverUri)
                 self.downloadImage(coverUri) { image in
                     track.cover = image
                     self.tableView.reloadData()

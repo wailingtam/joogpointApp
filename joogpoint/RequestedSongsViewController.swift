@@ -29,6 +29,7 @@ class RequestedSongsViewController: UIViewController, UITableViewDelegate {
         
         self.tableView.contentInset = UIEdgeInsetsMake(0, -12, 0, 0);
         
+        loadImages()
     }
     
     func downloadImage (imageUrl: String, completion: (UIImage) -> ()) {
@@ -59,11 +60,12 @@ class RequestedSongsViewController: UIViewController, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("TrackCell", forIndexPath: indexPath) as! TrackTableViewCell
         let track: Track
         track = requestedSongs![indexPath.row]
-        cell.textLabel?.text = track.title
-        cell.detailTextLabel?.text = track.artist
+        cell.titleLabel?.text = track.title
+        cell.artistLabel?.text = track.artist
+        cell.trackImage?.image = track.cover
         return cell
     }
     

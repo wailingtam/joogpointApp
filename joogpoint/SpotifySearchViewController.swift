@@ -170,20 +170,14 @@ class SpotifySearchViewController: UITableViewController, UISearchBarDelegate, U
                         
                     case .Failure(_):
                         var alertMessage = ""
-                        if let data = response.data {
-                            let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
-                            alertMessage = errorMessage
-                            // TODO: Deal with other errors
-                        }
-                        self.showAlert(alertMessage, buttonTitle: "Try again")
-                        
                         //print(error)
                         if let data = response.data {
                             let errorMessage = String(data: data, encoding: NSUTF8StringEncoding)!
-                            if errorMessage.rangeOfString("{error:Explicit lyrics are not allowed.}") != nil {
+                            if errorMessage.rangeOfString("Explicit lyrics") != nil {
                                 alertMessage = "Songs with explicit lyrics are not allowed in this establishment."
                             }
                         }
+                        self.showAlert(alertMessage, buttonTitle: "Try again")
 
                     }
                     
